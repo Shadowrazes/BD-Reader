@@ -12,6 +12,19 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<StackPanel>
+		<TabControl Items="{Binding Tables}">
+			<TabControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Name}"/>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+			<TabControl.ContentTemplate>
+				<DataTemplate>
+					<DataGrid Name="Table" Items="{Binding TableList}" AutoGenerateColumns="True"/>
+				</DataTemplate>
+			</TabControl.ContentTemplate>
+		</TabControl>
+	</StackPanel>
 
 </Window>
