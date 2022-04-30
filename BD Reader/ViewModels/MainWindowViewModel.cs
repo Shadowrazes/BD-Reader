@@ -15,10 +15,11 @@ namespace BD_Reader.ViewModels
     public class MainWindowViewModel : ViewModelBase
     {
         private string DbPath = @"Assets/WRC.db";
-        private ObservableCollection<object> tables;
+        private ObservableCollection<Table> tables;
         private SqliteConnection connection;
         private SqliteCommand command;
         private SqliteDataReader reader;
+
         public MainWindowViewModel()
         {
             try
@@ -26,16 +27,16 @@ namespace BD_Reader.ViewModels
                 string directoryPath = Directory.GetCurrentDirectory();
                 directoryPath = directoryPath.Remove(directoryPath.LastIndexOf("bin"));
                 DbPath = directoryPath + DbPath;
-                tables = new ObservableCollection<object>();
+                tables = new ObservableCollection<Table>();
 
                 connection = new SqliteConnection($"Data Source={DbPath}");
                 connection.Open();
                 command = connection.CreateCommand();
                 LoadDrivers();
                 LoadCars();
-                //LoadTeams();
-                //LoadResults();
-                //LoadEvents();
+                LoadTeams();
+                LoadResults();
+                LoadEvents();
             }
             catch
             {
@@ -43,11 +44,15 @@ namespace BD_Reader.ViewModels
             }
         }
 
-        public ObservableCollection<object> Tables
+        public ObservableCollection<Table> Tables
         {
             get
             {
                 return tables;
+            }
+            set
+            {
+                this.RaiseAndSetIfChanged(ref tables, value);
             }
         }
 
@@ -64,8 +69,7 @@ namespace BD_Reader.ViewModels
                     {
                         data.Add(new Event(reader[0] as string, reader[1] as string, reader[2] as string));
                     }
-                    Table<Event> events = new Table<Event>("Events", data);
-                    tables.Add(events);
+                    tables.Add(new Table("Events", new EventsTableViewModel(data)));
                 }
                 reader.Close();
             }
@@ -99,14 +103,13 @@ namespace BD_Reader.ViewModels
                         data.Add(new Driver(reader[0] as string, Convert.ToUInt16(reader[1]), reader[2] as string, age,
                             Convert.ToUInt16(reader[4]), Convert.ToUInt16(reader[5]), Convert.ToDouble(reader[6])));
                     }
-                    Table<Driver> events = new Table<Driver>("Drivers", data);
-                    tables.Add(events);
+                    tables.Add(new Table("Drivers", new DriversTableViewModel(data)));
                 }
                 reader.Close();
             }
             catch
             {
-                var a = 0;
+               
             }
         }
 
@@ -124,8 +127,7 @@ namespace BD_Reader.ViewModels
                         data.Add(new Car(Convert.ToUInt16(reader[0]), Convert.ToUInt16(reader[1]),
                             reader[2] as string, reader[3] as string, reader[4] as string));
                     }
-                    Table<Car> events = new Table<Car>("Cars", data);
-                    tables.Add(events);
+                    tables.Add(new Table("Cars", new CarsTableViewModel(data)));
                 }
                 reader.Close();
             }
@@ -149,9 +151,9 @@ namespace BD_Reader.ViewModels
                         data.Add(new Result(reader[0] as string, reader[1] as string,
                             reader[2] as string, Convert.ToUInt16(reader[3]), reader[4] as string));
                     }
-                    Table<Result> events = new Table<Result>("Results", data);
-                    tables.Add(events);
+                    tables.Add(new Table("Results", new ResultsTableViewModel(data)));
                 }
+                reader.Close();
             }
             catch
             {
@@ -173,8 +175,7 @@ namespace BD_Reader.ViewModels
                         data.Add(new Team(reader[0] as string, Convert.ToUInt16(reader[1]), Convert.ToUInt16(reader[2]),
                             Convert.ToUInt16(reader[3]), Convert.ToUInt16(reader[4])));
                     }
-                    Table<Team> events = new Table<Team>("Teams", data);
-                    tables.Add(events);
+                    tables.Add(new Table("Teams", new TeamsTableViewModel(data)));
                 }
                 reader.Close();
             }

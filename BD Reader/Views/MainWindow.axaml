@@ -12,8 +12,12 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<StackPanel>
-		<TabControl Items="{Binding Tables}">
+	<Window.Styles>
+		<StyleInclude Source="/Styles/Style.axaml"/>
+	</Window.Styles>
+
+	<Grid RowDefinitions="*, 50" ColumnDefinitions="*">
+		<TabControl Grid.Row="0" Grid.Column="0" Items="{Binding Tables}">
 			<TabControl.ItemTemplate>
 				<DataTemplate>
 					<TextBlock Text="{Binding Name}"/>
@@ -21,10 +25,10 @@
 			</TabControl.ItemTemplate>
 			<TabControl.ContentTemplate>
 				<DataTemplate>
-					<DataGrid Name="Table" Items="{Binding TableList}" AutoGenerateColumns="True"/>
+					<UserControl Content="{Binding TableList}"/>
 				</DataTemplate>
 			</TabControl.ContentTemplate>
 		</TabControl>
-	</StackPanel>
-
+		<Button Classes="gridBtn" Grid.Row="1" Grid.Column="0" Content="Open Query Manager"/>
+	</Grid>
 </Window>

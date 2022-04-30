@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace BD_Reader.Views
 {
-    public partial class DbTable : UserControl
+    public partial class EventsTableView : UserControl
     {
-        public DbTable()
+        public EventsTableView()
         {
             InitializeComponent();
         }

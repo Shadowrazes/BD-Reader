@@ -11,15 +11,15 @@ namespace BD_Reader.Models
         private string name;
         private uint years;
         private uint championsips;
-        private uint pouints;
+        private uint points;
         private uint podiums;
 
-        public Team(string _name = "", uint _years = 0, uint _championsips = 0, uint _pouints = 0, uint _podiums = 0)
+        public Team(string _name = "", uint _years = 0, uint _championsips = 0, uint _points = 0, uint _podiums = 0)
         {
             name = _name;
             years = _years;
             championsips = _championsips;
-            pouints = _pouints;
+            points = _points;
             podiums = _podiums;
         }
 
@@ -59,15 +59,15 @@ namespace BD_Reader.Models
             }
         }
 
-        public uint Pouints
+        public uint Points
         {
             get
             {
-                return pouints;
+                return points;
             }
             set
             {
-                pouints = value;
+                points = value;
             }
         }
 
