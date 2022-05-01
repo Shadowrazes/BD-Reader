@@ -1,57 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BD_Reader.Models
 {
-    public class Event
+    public partial class Event
     {
-        private string name;
-        private string date;
-        private string track;
-        public Event(string _name = "", string _date = "", string _track = "")
+        public Event()
         {
-            name = _name;
-            date = _date;
-            track = _track;
+            Results = new HashSet<Result>();
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-            set
-            {
-                name = value;
-            }
-        }
+        public string Name { get; set; } = null!;
+        public string? Date { get; set; }
+        public string? Track { get; set; }
 
-        public string Date
-        {
-            get
-            {
-                return date;
-            }
-            set
-            {
-                date = value;
-            }
-        }
-
-        public string Track
-        {
-            get
-            {
-                return track;
-            }
-            set
-            {
-                track = value;
-            }
-        }
+        public virtual ICollection<Result> Results { get; set; }
     }
 }

@@ -1,0 +1,69 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BD_Reader.Views.QueryManagerView">
+
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/Style.axaml"/>
+	</UserControl.Styles>
+
+	<Grid RowDefinitions="*, 50" ColumnDefinitions="*">
+		<TabControl Grid.Row="0" Grid.Column="0">
+			<TabItem Header="Select">
+				<StackPanel>
+					<StackPanel Orientation="Horizontal">
+						<StackPanel>
+							<TextBox Text="From Table" IsReadOnly="True"/>
+							<TextBox Text="Select Column" IsReadOnly="True"/>
+							<TextBox Text="With Filter" IsReadOnly="True"/>
+							<TextBox Text="Group By" IsReadOnly="True"/>
+						</StackPanel>
+						<StackPanel>
+							<ComboBox SelectedIndex="1">
+								<ComboBoxItem>Inline Items</ComboBoxItem>
+								<ComboBoxItem>Inline Item 2</ComboBoxItem>
+								<ComboBoxItem>Inline Item 3</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+							</ComboBox>
+							<ComboBox SelectedIndex="1" IsEnabled="False">
+								<ComboBoxItem>Inline Items</ComboBoxItem>
+								<ComboBoxItem>Inline Item 2</ComboBoxItem>
+								<ComboBoxItem>Inline Item 3</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+							</ComboBox>
+							<ComboBox SelectedIndex="1" IsEnabled="False">
+								<ComboBoxItem>Inline Items</ComboBoxItem>
+								<ComboBoxItem>Inline Item 2</ComboBoxItem>
+								<ComboBoxItem>Inline Item 3</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+							</ComboBox>
+							<ComboBox SelectedIndex="1" IsEnabled="False">
+								<ComboBoxItem>Inline Items</ComboBoxItem>
+								<ComboBoxItem>Inline Item 2</ComboBoxItem>
+								<ComboBoxItem>Inline Item 3</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+								<ComboBoxItem>Inline Item 4</ComboBoxItem>
+							</ComboBox>
+						</StackPanel>
+						<Button Classes="gridBtn" Content="Accept" IsEnabled="False" VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
+					</StackPanel>
+				</StackPanel>
+			</TabItem>
+			<TabItem Header="Union">
+
+			</TabItem>
+			<TabItem Header="Your Query List">
+				<ListBox>
+
+				</ListBox>
+			</TabItem>
+		</TabControl>
+		
+		<Button Classes="gridBtn" Command="{Binding $parent[Window].DataContext.OpenDBViewer}" Grid.Row="1" Grid.Column="0" Content="Back to DB Viewer"/>
+	</Grid>
+</UserControl>

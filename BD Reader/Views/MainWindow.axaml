@@ -6,29 +6,11 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="BD_Reader.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
-        Title="BD_Reader">
+        Title="BD_Reader"
+		Content="{Binding Page}">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<Window.Styles>
-		<StyleInclude Source="/Styles/Style.axaml"/>
-	</Window.Styles>
-
-	<Grid RowDefinitions="*, 50" ColumnDefinitions="*">
-		<TabControl Grid.Row="0" Grid.Column="0" Items="{Binding Tables}">
-			<TabControl.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Name}"/>
-				</DataTemplate>
-			</TabControl.ItemTemplate>
-			<TabControl.ContentTemplate>
-				<DataTemplate>
-					<UserControl Content="{Binding TableList}"/>
-				</DataTemplate>
-			</TabControl.ContentTemplate>
-		</TabControl>
-		<Button Classes="gridBtn" Grid.Row="1" Grid.Column="0" Content="Open Query Manager"/>
-	</Grid>
 </Window>

@@ -1,86 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BD_Reader.Models
 {
-    public class Car
+    public partial class Car
     {
-        private uint id;
-        private uint number;
-        private string engine;
-        private string chassis;
-        private string claass;
-
-        public Car(uint _id = 0, uint _number = 0, string _engine = "", string _chassis = "", string _claass = "")
+        private string? claass;
+        public Car()
         {
-            id = _id;
-            number = _number;
-            engine = _engine;
-            chassis = _chassis;
-            claass = _claass;
+            Drivers = new HashSet<Driver>();
         }
 
-        public uint Id
-        {
-            get 
-            { 
-                return id; 
-            }
-            set
-            {
-                id = value;
-            }
-        }
-
-        public uint Number
-        {
-            get
-            {
-                return number;
-            }
-            set
-            {
-                number = value;
-            }
-        }
-
-        public string Engine
-        {
-            get
-            {
-                return engine;
-            }
-            set
-            {
-                engine = value;
-            }
-        }
-
-        public string Chassis
-        {
-            get
-            {
-                return chassis;
-            }
-            set
-            {
-                chassis = value;
-            }
-        }
-
-        public string Class
-        {
-            get
-            {
-                return claass;
-            }
+        public long Id { get; set; }
+        public long? Number { get; set; }
+        public string? Engine { get; set; }
+        public string? Chassis { get; set; }
+        public string? Class 
+        { 
+            get => claass;
             set
             {
                 claass = value;
             }
         }
+
+        public virtual ICollection<Driver> Drivers { get; set; }
     }
 }

@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="BD_Reader.Views.DBViewerView">
+
+	<UserControl.Styles>
+		<StyleInclude Source="/Styles/Style.axaml"/>
+	</UserControl.Styles>
+
+	<Grid RowDefinitions="*, 50" ColumnDefinitions="*">
+		<TabControl Grid.Row="0" Grid.Column="0" Items="{Binding Tables}">
+			<TabControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Name}"/>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+			<TabControl.ContentTemplate>
+				<DataTemplate>
+					<UserControl Content="{Binding TableList}"/>
+				</DataTemplate>
+			</TabControl.ContentTemplate>
+		</TabControl>
+		<Button Classes="gridBtn" Grid.Row="1" Grid.Column="0" Content="Open Query Manager" Command="{Binding $parent[Window].DataContext.OpenQueryManager}"/>
+	</Grid>
+	
+</UserControl>

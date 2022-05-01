@@ -9,180 +9,50 @@ using BD_Reader.Models;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System;
+using System.Reactive.Linq;
 
 namespace BD_Reader.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private string DbPath = @"Assets/WRC.db";
-        private ObservableCollection<Table> tables;
-        private SqliteConnection connection;
-        private SqliteCommand command;
-        private SqliteDataReader reader;
+        private ViewModelBase page;
+        private DBViewerViewModel dbViewer;
+        private QueryManagerViewModel queryManager;
 
+        public ViewModelBase Page
+        {
+            set => this.RaiseAndSetIfChanged(ref page, value);
+            get => page;
+        }
+
+        //{Binding $parent[Window].DataContext.OpenQueryManager}
         public MainWindowViewModel()
         {
-            try
-            {
-                string directoryPath = Directory.GetCurrentDirectory();
-                directoryPath = directoryPath.Remove(directoryPath.LastIndexOf("bin"));
-                DbPath = directoryPath + DbPath;
-                tables = new ObservableCollection<Table>();
-
-                connection = new SqliteConnection($"Data Source={DbPath}");
-                connection.Open();
-                command = connection.CreateCommand();
-                LoadDrivers();
-                LoadCars();
-                LoadTeams();
-                LoadResults();
-                LoadEvents();
-            }
-            catch
-            {
-
-            }
+            dbViewer = new DBViewerViewModel();
+            queryManager = new QueryManagerViewModel();
+            Page = dbViewer;
         }
 
-        public ObservableCollection<Table> Tables
+        public void OpenQueryManager()
         {
-            get
-            {
-                return tables;
-            }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref tables, value);
-            }
+            Page = queryManager;
+            //Observable.Merge().Take(1)
+            //    .Subscribe((note) =>
+            //    {
+
+            //        Page = dbViewer;
+            //    });
         }
 
-        void LoadEvents()
+        public void OpenDBViewer()
         {
-            ObservableCollection<Event> data = new ObservableCollection<Event>();
-            command.CommandText = "SELECT * FROM Events";
-            try
-            {
-                reader = command.ExecuteReader();
-                if (reader.HasRows != false)
-                {
-                    while (reader.Read() != false)
-                    {
-                        data.Add(new Event(reader[0] as string, reader[1] as string, reader[2] as string));
-                    }
-                    tables.Add(new Table("Events", new EventsTableViewModel(data)));
-                }
-                reader.Close();
-            }
-            catch
-            {
+            Page = dbViewer;
+            //Observable.Merge().Take(1)
+            //    .Subscribe((note) =>
+            //    {
 
-            }
-        }
-
-        void LoadDrivers()
-        {
-            ObservableCollection<Driver> data = new ObservableCollection<Driver>();
-            command.CommandText = "SELECT * FROM Drivers";
-            try
-            {
-                reader = command.ExecuteReader();
-                if (reader.HasRows != false)
-                {
-                    while (reader.Read() != false)
-                    {
-                        uint age;
-                        try
-                        {
-                            age = Convert.ToUInt16(reader[3]);
-                        }
-                        catch
-                        {
-                            age = 0;
-                        }
-
-                        data.Add(new Driver(reader[0] as string, Convert.ToUInt16(reader[1]), reader[2] as string, age,
-                            Convert.ToUInt16(reader[4]), Convert.ToUInt16(reader[5]), Convert.ToDouble(reader[6])));
-                    }
-                    tables.Add(new Table("Drivers", new DriversTableViewModel(data)));
-                }
-                reader.Close();
-            }
-            catch
-            {
-               
-            }
-        }
-
-        void LoadCars()
-        {
-            ObservableCollection<Car> data = new ObservableCollection<Car>();
-            command.CommandText = "SELECT * FROM Cars";
-            try
-            {
-                reader = command.ExecuteReader();
-                if (reader.HasRows != false)
-                {
-                    while (reader.Read() != false)
-                    {
-                        data.Add(new Car(Convert.ToUInt16(reader[0]), Convert.ToUInt16(reader[1]),
-                            reader[2] as string, reader[3] as string, reader[4] as string));
-                    }
-                    tables.Add(new Table("Cars", new CarsTableViewModel(data)));
-                }
-                reader.Close();
-            }
-            catch
-            {
-
-            }
-        }
-
-        void LoadResults()
-        {
-            ObservableCollection<Result> data = new ObservableCollection<Result>();
-            command.CommandText = "SELECT * FROM Results";
-            try
-            {
-                reader = command.ExecuteReader();
-                if (reader.HasRows != false)
-                {
-                    while (reader.Read() != false)
-                    {
-                        data.Add(new Result(reader[0] as string, reader[1] as string,
-                            reader[2] as string, Convert.ToUInt16(reader[3]), reader[4] as string));
-                    }
-                    tables.Add(new Table("Results", new ResultsTableViewModel(data)));
-                }
-                reader.Close();
-            }
-            catch
-            {
-
-            }
-        }
-
-        void LoadTeams()
-        {
-            ObservableCollection<Team> data = new ObservableCollection<Team>();
-            command.CommandText = "SELECT * FROM Teams";
-            try
-            {
-                reader = command.ExecuteReader();
-                if (reader.HasRows != false)
-                {
-                    while (reader.Read() != false)
-                    {
-                        data.Add(new Team(reader[0] as string, Convert.ToUInt16(reader[1]), Convert.ToUInt16(reader[2]),
-                            Convert.ToUInt16(reader[3]), Convert.ToUInt16(reader[4])));
-                    }
-                    tables.Add(new Table("Teams", new TeamsTableViewModel(data)));
-                }
-                reader.Close();
-            }
-            catch
-            {
-
-            }
+            //        Page = dbViewer;
+            //    });
         }
     }
 }
