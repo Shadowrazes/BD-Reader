@@ -9,61 +9,121 @@
 		<StyleInclude Source="/Styles/Style.axaml"/>
 	</UserControl.Styles>
 
-	<Grid RowDefinitions="*, 50" ColumnDefinitions="*">
-		<TabControl Grid.Row="0" Grid.Column="0">
-			<TabItem Header="Select">
-				<StackPanel>
-					<StackPanel Orientation="Horizontal">
-						<StackPanel>
-							<TextBox Text="From Table" IsReadOnly="True"/>
-							<TextBox Text="Select Column" IsReadOnly="True"/>
-							<TextBox Text="With Filter" IsReadOnly="True"/>
-							<TextBox Text="Group By" IsReadOnly="True"/>
-						</StackPanel>
-						<StackPanel>
-							<ComboBox SelectedIndex="1">
-								<ComboBoxItem>Inline Items</ComboBoxItem>
-								<ComboBoxItem>Inline Item 2</ComboBoxItem>
-								<ComboBoxItem>Inline Item 3</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-							</ComboBox>
-							<ComboBox SelectedIndex="1" IsEnabled="False">
-								<ComboBoxItem>Inline Items</ComboBoxItem>
-								<ComboBoxItem>Inline Item 2</ComboBoxItem>
-								<ComboBoxItem>Inline Item 3</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-							</ComboBox>
-							<ComboBox SelectedIndex="1" IsEnabled="False">
-								<ComboBoxItem>Inline Items</ComboBoxItem>
-								<ComboBoxItem>Inline Item 2</ComboBoxItem>
-								<ComboBoxItem>Inline Item 3</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-							</ComboBox>
-							<ComboBox SelectedIndex="1" IsEnabled="False">
-								<ComboBoxItem>Inline Items</ComboBoxItem>
-								<ComboBoxItem>Inline Item 2</ComboBoxItem>
-								<ComboBoxItem>Inline Item 3</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-								<ComboBoxItem>Inline Item 4</ComboBoxItem>
-							</ComboBox>
-						</StackPanel>
-						<Button Classes="gridBtn" Content="Accept" IsEnabled="False" VerticalAlignment="Stretch" VerticalContentAlignment="Center"/>
-					</StackPanel>
-				</StackPanel>
-			</TabItem>
-			<TabItem Header="Union">
-
-			</TabItem>
-			<TabItem Header="Your Query List">
-				<ListBox>
-
-				</ListBox>
-			</TabItem>
-		</TabControl>
-		
-		<Button Classes="gridBtn" Command="{Binding $parent[Window].DataContext.OpenDBViewer}" Grid.Row="1" Grid.Column="0" Content="Back to DB Viewer"/>
+	<Grid RowDefinitions="*, *, 50, 50, 50" ColumnDefinitions="0.5*, 0.5*, *, 0.5*">
+		<Expander Header="From Tables" Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Center">
+			<ListBox Name="TableList" Items="{Binding Tables}" SelectionChanged="TableSelected" SelectionMode="Multiple">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}"/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</Expander>
+		<Expander Header="Select Columns" HorizontalContentAlignment="Center" Grid.Row="0" Grid.Column="1">
+			<ListBox Name="TablesColumnsList" Items="{Binding Tables}" SelectionMode="Multiple">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}"/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</Expander>
+		<Expander Header="With Filter" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Center" Grid.ColumnSpan="2">
+			<Grid RowDefinitions="*, 40" ColumnDefinitions="*">
+				<DataGrid Grid.Row="0" Grid.Column="0" Name="FlterList" Items="{Binding Filters}" CanUserReorderColumns="False">
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="AND|OR" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Classes="gridTextBox" Text="{Binding BoolOper}" IsReadOnly="True"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Column" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox Items="{Binding Columns}" HorizontalAlignment="Stretch"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Condition" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox Items="{Binding Columns}" HorizontalAlignment="Stretch"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Value" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Classes="gridTextBox"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+				<Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*" ColumnDefinitions="*, *, *">
+					<Button Classes="gridBtn" Content="AND" Grid.Row="0" Grid.Column="0"/>
+					<Button Classes="gridBtn" Content="OR" Grid.Row="0" Grid.Column="1"/>
+					<Button Classes="gridBtn" Content="PopBack" Grid.Row="0" Grid.Column="2"/>
+				</Grid>
+			</Grid>
+		</Expander>
+		<Expander Header="Group By" Grid.Row="1" Grid.Column="0" ExpandDirection="Up" HorizontalContentAlignment="Center">
+			<ListBox Name="GroupsColumnsList" Items="{Binding Tables}" SelectionMode="Multiple">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}"/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</Expander>
+		<Expander Header="With Group Filter" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ExpandDirection="Up">
+			<Grid RowDefinitions="*, 40" ColumnDefinitions="*">
+				<DataGrid Grid.Row="0" Grid.Column="0" Name="GroupFlterList" Items="{Binding Filters}" CanUserReorderColumns="False">
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="AND|OR" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Classes="gridTextBox" Text="{Binding BoolOper}" IsReadOnly="True"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Column" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox Items="{Binding Columns}" HorizontalAlignment="Stretch"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Condition" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox Items="{Binding Columns}" HorizontalAlignment="Stretch"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Header="Value" Width="*">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<TextBox Classes="gridTextBox"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</DataGrid>
+				<Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*" ColumnDefinitions="*, *, *">
+					<Button Classes="gridBtn" Content="AND" Grid.Row="0" Grid.Column="0"/>
+					<Button Classes="gridBtn" Content="OR" Grid.Row="0" Grid.Column="1"/>
+					<Button Classes="gridBtn" Content="PopBack" Grid.Row="0" Grid.Column="2"/>
+				</Grid>
+			</Grid>
+		</Expander>
+		<Expander Header="Your Requests" Grid.Row="1" Grid.Column="3" ExpandDirection="Up" HorizontalContentAlignment="Center">
+			
+		</Expander>
+		<TextBox Watermark="Request Name" KeyUp="RequestNameChanged" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
+		<Button Name="Accept" Classes="gridBtn" IsEnabled="False" Content="Accept" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"/>
+		<Button Classes="gridBtn" Command="{Binding $parent[Window].DataContext.OpenDBViewer}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Content="Back to DB Viewer"/>
 	</Grid>
 </UserControl>

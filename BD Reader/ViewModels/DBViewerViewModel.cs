@@ -14,41 +14,6 @@ namespace BD_Reader.ViewModels
 {
     public class DBViewerViewModel : ViewModelBase
     {
-        public class Table
-        {
-            private string name;
-            private ViewModelBase tableList;
-            public Table(string _name, ViewModelBase _tableList)
-            {
-                name = _name;
-                tableList = _tableList;
-            }
-
-            public string Name
-            {
-                get
-                {
-                    return name;
-                }
-                set
-                {
-                    name = value;
-                }
-            }
-
-            public ViewModelBase TableList
-            {
-                get
-                {
-                    return tableList;
-                }
-                set
-                {
-                    tableList = value;
-                }
-            }
-        }
-
         private ObservableCollection<Table> tables;
         private List<List<string>> queryTable = new List<List<string>>();
         private ObservableCollection<Driver> drivers;
@@ -72,17 +37,19 @@ namespace BD_Reader.ViewModels
                 drivers = new ObservableCollection<Driver>(DataBase.Drivers);
                 tables.Add(new Table("Drivers", new DriversTableViewModel(drivers)));
 
-                cars = new ObservableCollection<Car>(DataBase.Cars);
-                tables.Add(new Table("Cars", new CarsTableViewModel(cars)));
+                //cars = new ObservableCollection<Car>(DataBase.Cars);
+                //tables.Add(new Table("Cars", new CarsTableViewModel(cars)));
 
                 events = new ObservableCollection<Event>(DataBase.Events);
                 tables.Add(new Table("Events", new EventsTableViewModel(events)));
 
-                results = new ObservableCollection<Result>(DataBase.Results);
-                tables.Add(new Table("Results", new ResultsTableViewModel(results)));
+                //results = new ObservableCollection<Result>(DataBase.Results);
+                //tables.Add(new Table("Results", new ResultsTableViewModel(results)));
 
                 teams = new ObservableCollection<Team>(DataBase.Teams);
                 tables.Add(new Table("Teams", new TeamsTableViewModel(teams)));
+
+                //var res = from result in results join evenet in events on result.EventName equals evenet.Name select new { resulte }; 
             }
             catch
             {
@@ -92,13 +59,50 @@ namespace BD_Reader.ViewModels
 
         public ObservableCollection<Table> Tables
         {
-            get
-            {
-                return tables;
-            }
+            get => tables;
             set
             {
                 this.RaiseAndSetIfChanged(ref tables, value);
+            }
+        }
+        public ObservableCollection<Driver> Drivers
+        {
+            get => drivers;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref drivers, value);
+            }
+        }
+        public ObservableCollection<Car> Cars
+        {
+            get => cars;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref cars, value);
+            }
+        }
+        public ObservableCollection<Event> Events
+        {
+            get => events;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref events, value);
+            }
+        }
+        public ObservableCollection<Result> Results
+        {
+            get => results;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref results, value);
+            }
+        }
+        public ObservableCollection<Team> Teams
+        {
+            get => teams;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref teams, value);
             }
         }
     }
