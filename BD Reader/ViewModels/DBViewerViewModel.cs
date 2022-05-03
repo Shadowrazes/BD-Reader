@@ -15,12 +15,37 @@ namespace BD_Reader.ViewModels
     public class DBViewerViewModel : ViewModelBase
     {
         private ObservableCollection<Table> tables;
-        private List<List<string>> queryTable = new List<List<string>>();
         private ObservableCollection<Driver> drivers;
-        ObservableCollection<Car> cars;
-        ObservableCollection<Event> events;
-        ObservableCollection<Result> results;
-        ObservableCollection<Team> teams;
+        private ObservableCollection<Car> cars;
+        private ObservableCollection<Event> events;
+        private ObservableCollection<Result> results;
+        private ObservableCollection<Team> teams;
+
+        private ObservableCollection<string> FindProperties(string entityName, List<string> properties)
+        {
+            ObservableCollection<string> result = new ObservableCollection<string>();
+            for (int i = 0; i < properties.Count(); i++)
+            {
+                if (properties[i].IndexOf("EntityType:" + entityName) != -1)
+                {
+                    try
+                    {
+                        i++;
+                        while (properties[i].IndexOf("(") != -1 && i < properties.Count())
+                        {
+                            result.Add(properties[i].Remove(properties[i].IndexOf("(")));
+                            i++;
+                        }
+                        return result;
+                    }
+                    catch
+                    {
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
 
         public DBViewerViewModel()
         {
@@ -29,27 +54,29 @@ namespace BD_Reader.ViewModels
                 tables = new ObservableCollection<Table>();
                 var DataBase = new WRCContext();
 
-                foreach (var car in DataBase.Cars.Where(i => i.Id == 1))
-                {
-                    var a = 0;
-                }
+                string tableInfo = DataBase.Model.ToDebugString();
+                tableInfo = tableInfo.Replace(" ", "");
+                string[] splitTableInfo = tableInfo.Split("\r\n");
+                List<string> properties = new List<string>(splitTableInfo.Where(str => str.IndexOf("Entity") != -1 ||
+                                                            (str.IndexOf("(") != -1 && str.IndexOf("<") == -1) &&
+                                                            str.IndexOf("Navigation") == -1 && str.IndexOf("(Car)") == -1));
+               
+
 
                 drivers = new ObservableCollection<Driver>(DataBase.Drivers);
-                tables.Add(new Table("Drivers", new DriversTableViewModel(drivers)));
+                tables.Add(new Table("Drivers", new DriversTableViewModel(drivers), FindProperties("Driver", properties)));
 
-                //cars = new ObservableCollection<Car>(DataBase.Cars);
-                //tables.Add(new Table("Cars", new CarsTableViewModel(cars)));
+                cars = new ObservableCollection<Car>(DataBase.Cars);
+                tables.Add(new Table("Cars", new CarsTableViewModel(cars), FindProperties("Car", properties)));
 
                 events = new ObservableCollection<Event>(DataBase.Events);
-                tables.Add(new Table("Events", new EventsTableViewModel(events)));
+                tables.Add(new Table("Events", new EventsTableViewModel(events), FindProperties("Event", properties)));
 
-                //results = new ObservableCollection<Result>(DataBase.Results);
-                //tables.Add(new Table("Results", new ResultsTableViewModel(results)));
+                results = new ObservableCollection<Result>(DataBase.Results);
+                tables.Add(new Table("Results", new ResultsTableViewModel(results), FindProperties("Result", properties)));
 
                 teams = new ObservableCollection<Team>(DataBase.Teams);
-                tables.Add(new Table("Teams", new TeamsTableViewModel(teams)));
-
-                //var res = from result in results join evenet in events on result.EventName equals evenet.Name select new { resulte }; 
+                tables.Add(new Table("Teams", new TeamsTableViewModel(teams), FindProperties("Team", properties)));
             }
             catch
             {

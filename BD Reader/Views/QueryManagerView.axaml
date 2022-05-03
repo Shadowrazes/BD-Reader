@@ -20,10 +20,13 @@
 			</ListBox>
 		</Expander>
 		<Expander Header="Select Columns" HorizontalContentAlignment="Center" Grid.Row="0" Grid.Column="1">
-			<ListBox Name="TablesColumnsList" Items="{Binding Tables}" SelectionMode="Multiple">
+			<ListBox Name="TablesColumnsList" Width="200" Items="{Binding ColumnList}" SelectionMode="Multiple">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
-						<TextBlock Text="{Binding Name}"/>
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="{Binding TableName}"/>
+							<TextBlock Text="{Binding ColumnName}"/>
+						</StackPanel>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>
@@ -70,7 +73,7 @@
 			</Grid>
 		</Expander>
 		<Expander Header="Group By" Grid.Row="1" Grid.Column="0" ExpandDirection="Up" HorizontalContentAlignment="Center">
-			<ListBox Name="GroupsColumnsList" Items="{Binding Tables}" SelectionMode="Multiple">
+			<ListBox Name="GroupsColumnsList"  Items="{Binding Tables}" SelectionMode="Multiple">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Name}"/>

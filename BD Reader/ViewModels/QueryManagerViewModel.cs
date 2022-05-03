@@ -34,14 +34,28 @@ namespace BD_Reader.ViewModels
             public string FilterVal { get; set; }
         }
 
+        public class ColumnListItem
+        {
+            public ColumnListItem(string _TableName, string _ColumnName)
+            {
+                TableName = _TableName + ": ";
+                ColumnName = _ColumnName;
+            }
+            public string TableName { get; set; }
+            public string ColumnName { get; set; }
+        }
+
         private DBViewerViewModel DbViewer;
         private ObservableCollection<Table> tables;
+        private ObservableCollection<ColumnListItem> columnList;
         public QueryManagerViewModel(DBViewerViewModel _DBViewer)
         {
             DbViewer = _DBViewer;
-            Filters = new ObservableCollection<Filter>();
-            //DbViewer.Tables
             tables = DbViewer.Tables;
+            Filters = new ObservableCollection<Filter>();
+            columnList = new ObservableCollection<ColumnListItem>();
+
+
             ObservableCollection<string> columns = new ObservableCollection<string>();
             for (int i = 0; i < 10; i++)
             {
@@ -52,7 +66,28 @@ namespace BD_Reader.ViewModels
                 Filters.Add(new Filter("AND", columns));
             }
         }
+
+        public void UpdateColumnList(List<Table> selectedTables)
+        {
+            ColumnList = new ObservableCollection<ColumnListItem>();
+            foreach (Table table in selectedTables)
+            {
+                foreach (var column in table.Properties)
+                {
+                    ColumnList.Add(new ColumnListItem(table.Name, column));
+                }
+            }
+        }
+
         public ObservableCollection<Filter> Filters { get; set; }
+        public ObservableCollection<ColumnListItem> ColumnList
+        {
+            get => columnList;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref columnList, value);
+            }
+        }
         public ObservableCollection<Table> Tables
         {
             get => tables;

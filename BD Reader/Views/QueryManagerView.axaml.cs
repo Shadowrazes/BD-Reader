@@ -2,6 +2,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Input;
+using BD_Reader.ViewModels;
+using System.Collections.ObjectModel;
+using System.Collections.Generic;
 
 namespace BD_Reader.Views
 {
@@ -33,8 +36,16 @@ namespace BD_Reader.Views
             ListBox? tablesList = control as ListBox;
             if(tablesList != null)
             {
-                var a = tablesList.Items;
-                var b = tablesList.SelectedItems;
+                var context = this.DataContext as QueryManagerViewModel;
+                if(context != null)
+                {
+                    List<Table> tables = new List<Table>();
+                    foreach (var table in tablesList.SelectedItems)
+                    {
+                        tables.Add(table as Table);
+                    }
+                    context.UpdateColumnList(tables);
+                }
             }
         }
     }
