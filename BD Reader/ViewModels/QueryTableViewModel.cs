@@ -14,13 +14,13 @@ namespace BD_Reader.ViewModels
 {
     public class QueryTableViewModel : MainWindowViewModel
     {
-        private List<List<string>> queryList;
-        public QueryTableViewModel(List<List<string>> _queryList)
+        private List<List<object>> queryList;
+        public QueryTableViewModel(List<List<object>> _queryList)
         {
             queryList = _queryList;
         }
 
-        public List<List<string>> QueryList
+        public List<List<object>> QueryList
         {
             get
             {

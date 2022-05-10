@@ -9,11 +9,14 @@
 		<StyleInclude Source="/Styles/Style.axaml"/>
 	</UserControl.Styles>
 
-	<Grid RowDefinitions="*, 50" ColumnDefinitions="*">
+	<Grid RowDefinitions="*, 50" ColumnDefinitions="*" >
 		<TabControl Grid.Row="0" Grid.Column="0" Items="{Binding Tables}">
 			<TabControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding Name}"/>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding Name}"/>
+						<Button Content="x" Click="DeleteTab" IsEnabled="{Binding IsSubTable}"/>
+					</StackPanel>
 				</DataTemplate>
 			</TabControl.ItemTemplate>
 			<TabControl.ContentTemplate>

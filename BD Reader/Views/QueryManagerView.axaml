@@ -31,8 +31,8 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</Expander>
-		<Expander Header="With Filter" Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Center" Grid.ColumnSpan="2">
-			<Grid RowDefinitions="*, 40" ColumnDefinitions="*">
+		<Expander Header="With Filter" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
+			<Grid RowDefinitions="auto, 40" ColumnDefinitions="*">
 				<DataGrid Grid.Row="0" Grid.Column="0" Name="FlterList" Items="{Binding Filters}" CanUserReorderColumns="False">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="AND|OR" Width="*">
@@ -45,14 +45,23 @@
 						<DataGridTemplateColumn Header="Column" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<ComboBox Items="{Binding Columns}" HorizontalAlignment="Stretch"/>
-								</DataTemplate>
+									<ComboBox Items="{Binding Columns}" HorizontalAlignment="Stretch">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Orientation="Horizontal">
+													<TextBlock Text="{Binding TableName}"/>
+													<TextBlock Text="{Binding ColumnName}"/>
+												</StackPanel>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+							</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
 						<DataGridTemplateColumn Header="Condition" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate>
-									<ComboBox Items="{Binding Columns}" HorizontalAlignment="Stretch"/>
+									<ComboBox Items="{Binding Operators}" HorizontalAlignment="Stretch"/>
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
@@ -66,8 +75,8 @@
 					</DataGrid.Columns>
 				</DataGrid>
 				<Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*" ColumnDefinitions="*, *, *">
-					<Button Classes="gridBtn" Content="AND" Grid.Row="0" Grid.Column="0"/>
-					<Button Classes="gridBtn" Content="OR" Grid.Row="0" Grid.Column="1"/>
+					<Button Classes="gridBtn" Command="{Binding AddFilterAND}" Content="AND" Grid.Row="0" Grid.Column="0"/>
+					<Button Classes="gridBtn" Command="{Binding AddFilterOR}" Content="OR" Grid.Row="0" Grid.Column="1"/>
 					<Button Classes="gridBtn" Content="PopBack" Grid.Row="0" Grid.Column="2"/>
 				</Grid>
 			</Grid>
@@ -123,10 +132,16 @@
 			</Grid>
 		</Expander>
 		<Expander Header="Your Requests" Grid.Row="1" Grid.Column="3" ExpandDirection="Up" HorizontalContentAlignment="Center">
-			
+			<ListBox Name="RequestList" Items="{Binding Requests}" SelectionChanged="TableSelected" SelectionMode="Multiple">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}"/>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
 		</Expander>
-		<TextBox Watermark="Request Name" KeyUp="RequestNameChanged" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
-		<Button Name="Accept" Classes="gridBtn" IsEnabled="False" Content="Accept" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"/>
+		<TextBox Name="RequestName" Watermark="Request Name" KeyUp="RequestNameChanged" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
+		<Button Name="Accept" Click="AddRequest" Classes="gridBtn" IsEnabled="False" Content="Accept" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"/>
 		<Button Classes="gridBtn" Command="{Binding $parent[Window].DataContext.OpenDBViewer}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Content="Back to DB Viewer"/>
 	</Grid>
 </UserControl>

@@ -5,6 +5,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BD_Reader.Views.TeamsTableView">
 
-	<DataGrid Name="Table" Items="{Binding Teams}" AutoGenerateColumns="True"/>
+	<DataGrid Name="Table" Items="{Binding Teams}" AutoGeneratingColumn ="DeleteNullColumn" AutoGenerateColumns="True"/>
 	
 </UserControl>

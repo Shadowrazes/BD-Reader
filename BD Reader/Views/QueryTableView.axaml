@@ -5,18 +5,21 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BD_Reader.Views.QueryTableView">
 
-	<DataGrid Items="{Binding QueryList}">
-		<DataGrid.Columns>
-			<DataGridTemplateColumn Width="*">
-				<DataGridTemplateColumn.CellTemplate>
-					<DataTemplate>
-						<DataGrid Name="Row" Items="{Binding}" AutoGenerateColumns="True">
-								
-						</DataGrid>
-				</DataTemplate>
-				</DataGridTemplateColumn.CellTemplate>
-			</DataGridTemplateColumn>
-		</DataGrid.Columns>
-	</DataGrid>
+	<ListBox Items="{Binding QueryList}">
+		<ListBox.ItemsPanel>
+			<ItemsPanelTemplate>
+				<StackPanel Orientation="Horizontal">
+					
+				</StackPanel>
+			</ItemsPanelTemplate>
+		</ListBox.ItemsPanel>
+		<ListBox.ItemTemplate>
+			<DataTemplate>
+				<ItemsControl Items="{Binding}">
+					
+				</ItemsControl>
+			</DataTemplate>
+		</ListBox.ItemTemplate>
+	</ListBox>
 	
 </UserControl>

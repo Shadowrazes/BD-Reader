@@ -15,5 +15,13 @@ namespace BD_Reader.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
+
+        private void DeleteNullColumn(object control, DataGridAutoGeneratingColumnEventArgs args)
+        {
+            if (args.PropertyName == "Results")
+            {
+                args.Cancel = true;
+            }
+        }
     }
 }

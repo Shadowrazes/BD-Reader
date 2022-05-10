@@ -5,6 +5,6 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BD_Reader.Views.EventsTableView">
 
-	<DataGrid Name="Table" Items="{Binding Events}" AutoGenerateColumns="True"/>
+	<DataGrid Name="Table" Items="{Binding Events}" AutoGeneratingColumn ="DeleteNullColumn" AutoGenerateColumns="True"/>
 	
 </UserControl>

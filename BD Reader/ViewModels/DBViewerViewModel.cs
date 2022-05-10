@@ -20,6 +20,7 @@ namespace BD_Reader.ViewModels
         private ObservableCollection<Event> events;
         private ObservableCollection<Result> results;
         private ObservableCollection<Team> teams;
+        private ObservableCollection<Table> requests;
 
         private ObservableCollection<string> FindProperties(string entityName, List<string> properties)
         {
@@ -52,6 +53,7 @@ namespace BD_Reader.ViewModels
             try
             {
                 tables = new ObservableCollection<Table>();
+                requests = new ObservableCollection<Table>();
                 var DataBase = new WRCContext();
 
                 string tableInfo = DataBase.Model.ToDebugString();
@@ -64,19 +66,19 @@ namespace BD_Reader.ViewModels
 
 
                 drivers = new ObservableCollection<Driver>(DataBase.Drivers);
-                tables.Add(new Table("Drivers", new DriversTableViewModel(drivers), FindProperties("Driver", properties)));
+                tables.Add(new Table("Drivers", false, new DriversTableViewModel(drivers), FindProperties("Driver", properties)));
 
                 cars = new ObservableCollection<Car>(DataBase.Cars);
-                tables.Add(new Table("Cars", new CarsTableViewModel(cars), FindProperties("Car", properties)));
+                tables.Add(new Table("Cars", false, new CarsTableViewModel(cars), FindProperties("Car", properties)));
 
                 events = new ObservableCollection<Event>(DataBase.Events);
-                tables.Add(new Table("Events", new EventsTableViewModel(events), FindProperties("Event", properties)));
+                tables.Add(new Table("Events", false, new EventsTableViewModel(events), FindProperties("Event", properties)));
 
                 results = new ObservableCollection<Result>(DataBase.Results);
-                tables.Add(new Table("Results", new ResultsTableViewModel(results), FindProperties("Result", properties)));
+                tables.Add(new Table("Results", false, new ResultsTableViewModel(results), FindProperties("Result", properties)));
 
                 teams = new ObservableCollection<Team>(DataBase.Teams);
-                tables.Add(new Table("Teams", new TeamsTableViewModel(teams), FindProperties("Team", properties)));
+                tables.Add(new Table("Teams", false, new TeamsTableViewModel(teams), FindProperties("Team", properties)));
             }
             catch
             {
@@ -130,6 +132,14 @@ namespace BD_Reader.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref teams, value);
+            }
+        }
+        public ObservableCollection<Table> Requests
+        {
+            get => requests;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref requests, value);
             }
         }
     }

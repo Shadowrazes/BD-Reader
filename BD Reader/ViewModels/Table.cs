@@ -16,9 +16,10 @@ namespace BD_Reader.ViewModels
     {
         private string name;
         private ViewModelBase tableView;
-        public Table(string _name, ViewModelBase _tableView, ObservableCollection<string> _Properties)
+        public Table(string _name, bool _IsSubTable, ViewModelBase _tableView, ObservableCollection<string> _Properties)
         {
             name = _name;
+            IsSubTable = _IsSubTable;
             tableView = _tableView;
             Properties = _Properties;
         }
@@ -34,6 +35,8 @@ namespace BD_Reader.ViewModels
                 name = value;
             }
         }
+
+        public bool IsSubTable { get; }
 
         public ViewModelBase TableView
         {

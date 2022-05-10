@@ -5,6 +5,7 @@ using Avalonia.Input;
 using BD_Reader.ViewModels;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Avalonia.Interactivity;
 
 namespace BD_Reader.Views
 {
@@ -19,13 +20,31 @@ namespace BD_Reader.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
-
+        public void AddRequest(object control, RoutedEventArgs args)
+        {
+            QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+            if (context != null)
+            {
+                context.AddRequest(this.FindControl<TextBox>("RequestName").Text);
+                this.FindControl<Button>("Accept").IsEnabled = false;
+            }
+        }
         public void RequestNameChanged(object control, KeyEventArgs args)
         {
-            TextBox? requestname = control as TextBox;
-            if(requestname != null)
+            TextBox? requestName = control as TextBox;
+            if(requestName != null)
             {
-                if(requestname.Text != "")
+                var context = this.DataContext as QueryManagerViewModel;
+                bool tableExist = false;
+                foreach(var table in context.Tables)
+                {
+                    if(table.Name == requestName.Text)
+                    {
+                        tableExist = true;
+                        break;
+                    }
+                }
+                if (requestName.Text != "" && !tableExist)
                     this.FindControl<Button>("Accept").IsEnabled = true;
                 else
                     this.FindControl<Button>("Accept").IsEnabled = false;
@@ -44,7 +63,8 @@ namespace BD_Reader.Views
                     {
                         tables.Add(table as Table);
                     }
-                    context.UpdateColumnList(tables);
+                    context.SelectedTables = tables;
+                    context.UpdateColumnList();
                 }
             }
         }
