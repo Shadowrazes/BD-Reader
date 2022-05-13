@@ -20,7 +20,7 @@ namespace BD_Reader.Views
         {
             AvaloniaXamlLoader.Load(this);
         }
-        public void AddRequest(object control, RoutedEventArgs args)
+        private void AddRequest(object control, RoutedEventArgs args)
         {
             QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
             if (context != null)
@@ -29,7 +29,7 @@ namespace BD_Reader.Views
                 this.FindControl<Button>("Accept").IsEnabled = false;
             }
         }
-        public void RequestNameChanged(object control, KeyEventArgs args)
+        private void RequestNameChanged(object control, KeyEventArgs args)
         {
             TextBox? requestName = control as TextBox;
             if(requestName != null)
@@ -50,7 +50,7 @@ namespace BD_Reader.Views
                     this.FindControl<Button>("Accept").IsEnabled = false;
             }
         }
-        public void TableSelected(object control, SelectionChangedEventArgs args)
+        private void TableSelected(object control, SelectionChangedEventArgs args)
         {
             ListBox? tablesList = control as ListBox;
             if(tablesList != null)

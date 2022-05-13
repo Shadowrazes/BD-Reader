@@ -9,8 +9,6 @@ namespace BD_Reader.Views
         public QueryTableView()
         {
             InitializeComponent();
-            //this.FindControl<DataGrid>("Row").row
-            //this.FindControl<Grid>("row")
         }
 
         private void InitializeComponent()

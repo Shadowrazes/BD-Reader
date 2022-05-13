@@ -18,7 +18,7 @@ namespace BD_Reader.Views
             AvaloniaXamlLoader.Load(this);
         }
 
-        public void DeleteTab(object control, RoutedEventArgs args)
+        private void DeleteTab(object control, RoutedEventArgs args)
         {
             Button? btn = control as Button;
             if (btn != null)

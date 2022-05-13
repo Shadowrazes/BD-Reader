@@ -20,7 +20,6 @@ namespace BD_Reader.Views
         public CarsTableView()
         {
             InitializeComponent();
-            var a = this.FindControl<DataGrid>("Table");
         }
 
         private void InitializeComponent()
