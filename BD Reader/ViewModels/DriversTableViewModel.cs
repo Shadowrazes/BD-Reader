@@ -14,22 +14,27 @@ namespace BD_Reader.ViewModels
 {
     public class DriversTableViewModel : ViewModelBase
     {
-        private ObservableCollection<Driver> drivers;
+        private ObservableCollection<Driver> table;
         public DriversTableViewModel(ObservableCollection<Driver> _drivers)
         {
-            Drivers = _drivers;
+            Table = _drivers;
         }
 
-        public ObservableCollection<Driver> Drivers
+        public ObservableCollection<Driver> Table
         {
             get
             {
-                return drivers;
+                return table;
             }
             set
             {
-                drivers = value;
+                table = value;
             }
+        }
+
+        public override ObservableCollection<Driver> GetTable()
+        {
+            return Table;
         }
     }
 }

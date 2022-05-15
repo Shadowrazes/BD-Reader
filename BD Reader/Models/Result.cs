@@ -11,6 +11,22 @@ namespace BD_Reader.Models
         public long? Position { get; set; }
         public string? Time { get; set; }
 
+        public object? this[string property]
+        {
+            get
+            {
+                switch (property)
+                {
+                    case "DriverFullName": return DriverFullName;
+                    case "StageName": return StageName;
+                    case "EventName": return EventName;
+                    case "Position": return Position;
+                    case "Time": return Time;
+                }
+                return null;
+            }
+        }
+
         public virtual Event? EventNameNavigation { get; set; }
     }
 }

@@ -79,6 +79,36 @@ namespace BD_Reader.ViewModels
             }
             Filters.Clear();
             Filters.Add(new Filter("", ColumnList));
+            //if (SelectedTables.Count > 1)
+            //    JoinTables();
+        }
+
+        public void JoinTables()
+        {
+            Dictionary<string, List<object?>> JoinedTable = new Dictionary<string, List<object?>>();
+            List<List<object?>> a = new List<List<object?>>();
+            if (SelectedTables[0].Name == "Drivers" && SelectedTables[1].Name == "Results")
+            {
+                dynamic results = SelectedTables[1].TableView.GetTable();
+                foreach (Result result in results)
+                {
+                    List<object> b = new List<object>();
+                    foreach (string prop in SelectedTables[1].Properties)
+                    {
+                        b.Add(result[prop]);
+                    }
+                }
+
+            }
+
+
+            foreach (Table table in SelectedTables)
+            {
+                foreach(var item in table.TableValues)
+                {
+                    JoinedTable.TryAdd(item.Key, item.Value);
+                }
+            }
         }
 
         public void AddFilterOR()

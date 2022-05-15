@@ -14,22 +14,27 @@ namespace BD_Reader.ViewModels
 {
     public class CarsTableViewModel : ViewModelBase
     {
-        private ObservableCollection<Car> cars;
+        private ObservableCollection<Car> table;
         public CarsTableViewModel(ObservableCollection<Car> _cars)
         {
-            Cars = _cars;
+            Table = _cars;
         }
 
-        public ObservableCollection<Car> Cars
+        public ObservableCollection<Car> Table
         {
             get
             {
-                return cars;
+                return table;
             }
             set
             {
-                cars = value;
+                table = value;
             }
+        }
+
+        public override ObservableCollection<Car> GetTable()
+        {
+            return Table;
         }
     }
 }

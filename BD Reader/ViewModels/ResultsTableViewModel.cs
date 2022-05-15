@@ -14,22 +14,27 @@ namespace BD_Reader.ViewModels
 {
     public class ResultsTableViewModel : ViewModelBase
     {
-        private ObservableCollection<Result> results;
+        private ObservableCollection<Result> table;
         public ResultsTableViewModel(ObservableCollection<Result> _results)
         {
-            Results = _results;
+            Table = _results;
         }
 
-        public ObservableCollection<Result> Results
+        public ObservableCollection<Result> Table
         {
             get
             {
-                return results;
+                return table;
             }
             set
             {
-                results = value;
+                table = value;
             }
+        }
+
+        public override ObservableCollection<Result> GetTable()
+        {
+            return Table;
         }
     }
 }

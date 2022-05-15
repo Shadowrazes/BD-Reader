@@ -22,6 +22,26 @@ namespace BD_Reader.ViewModels
             IsSubTable = _IsSubTable;
             tableView = _tableView;
             Properties = _Properties;
+            TableValues = new Dictionary<string, List<object?>>();
+            var a = TableView.GetTable();
+            dynamic table = TableView.GetTable();
+            if (table != null)
+            {
+                foreach (string prop in Properties)
+                {
+                    TableValues.Add(prop, new List<object?>() { name + ": " + prop });
+                }
+                for (int i = 0; i < TableValues.Count; i++)
+                {
+                    foreach(string prop in Properties)
+                    {
+                        for(int j = 0; j < table.Count; j++)
+                        {
+                            TableValues[prop].Add(table[j][prop]);
+                        }
+                    }
+                }
+            }
         }
 
         public string Name
@@ -49,6 +69,8 @@ namespace BD_Reader.ViewModels
                 tableView = value;
             }
         }
+
+        public Dictionary<string, List<object?>> TableValues { get; }
 
         public ObservableCollection<string> Properties { get; set; }
     }

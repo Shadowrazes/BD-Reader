@@ -5,5 +5,5 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="BD_Reader.Views.DriversTableView">
 
-	<DataGrid Name="Table" Items="{Binding Drivers}" AutoGeneratingColumn ="DeleteNullColumn" AutoGenerateColumns="True"/>
+	<DataGrid Name="Table" Items="{Binding Table}" AutoGeneratingColumn ="DeleteNullColumn" AutoGenerateColumns="True"/>
 </UserControl>

@@ -14,22 +14,27 @@ namespace BD_Reader.ViewModels
 {
     public class TeamsTableViewModel : ViewModelBase
     {
-        private ObservableCollection<Team> teams;
+        private ObservableCollection<Team> table;
         public TeamsTableViewModel(ObservableCollection<Team> _teams)
         {
-            Teams = _teams;
+            Table = _teams;
         }
 
-        public ObservableCollection<Team> Teams
+        public ObservableCollection<Team> Table
         {
             get
             {
-                return teams;
+                return table;
             }
             set
             {
-                teams = value;
+                table = value;
             }
+        }
+
+        public override ObservableCollection<Team> GetTable()
+        {
+            return Table;
         }
     }
 }

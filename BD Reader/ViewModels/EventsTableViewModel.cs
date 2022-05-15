@@ -14,22 +14,27 @@ namespace BD_Reader.ViewModels
 {
     public class EventsTableViewModel : ViewModelBase
     {
-        private ObservableCollection<Event> events;
+        private ObservableCollection<Event> table;
         public EventsTableViewModel(ObservableCollection<Event> _events)
         {
-            Events = _events;
+            Table = _events;
         }
 
-        public ObservableCollection<Event> Events
+        public ObservableCollection<Event> Table
         {
             get
             {
-                return events;
+                return table;
             }
             set
             {
-                events = value;
+                table = value;
             }
+        }
+
+        public override ObservableCollection<Event> GetTable()
+        {
+            return Table;
         }
     }
 }

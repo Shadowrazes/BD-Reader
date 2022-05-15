@@ -24,6 +24,22 @@ namespace BD_Reader.Models
             }
         }
 
+        public object? this[string property]
+        {
+            get
+            {
+                switch (property)
+                {
+                    case "Id": return Id;
+                    case "Number": return Number;
+                    case "Engine": return Engine;
+                    case "Chassis": return Chassis;
+                    case "Class": return Class;
+                }
+                return null;
+            }
+        }
+
         public virtual ICollection<Driver> Drivers { get; set; }
     }
 }

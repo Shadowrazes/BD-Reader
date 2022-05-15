@@ -7,5 +7,6 @@ namespace BD_Reader.ViewModels
 {
     public class ViewModelBase : ReactiveObject
     {
+        public virtual object GetTable() { return null; }
     }
 }
