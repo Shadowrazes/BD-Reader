@@ -39,9 +39,9 @@ namespace BD_Reader.ViewModels
 
         public class ColumnListItem
         {
-            public ColumnListItem(string _TableName, string _ColumnName)
+            public ColumnListItem(/*string _TableName,*/ string _ColumnName)
             {
-                TableName = _TableName + ": ";
+                //TableName = _TableName + ": ";
                 ColumnName = _ColumnName;
             }
             public string TableName { get; set; }
@@ -53,6 +53,13 @@ namespace BD_Reader.ViewModels
         private ObservableCollection<Table> requests;
         private ObservableCollection<ColumnListItem> columnList;
         private ObservableCollection<Filter> filters;
+        private Dictionary<string, string> Keys = new Dictionary<string, string>()
+        {
+            { "CarId", "Id"},
+            { "FullName", "DriverFullName"},
+            { "EventName", "Name"},
+            { "TeamName", "TeamName"}
+        };
 
         public QueryManagerViewModel(DBViewerViewModel _DBViewer)
         {
@@ -63,6 +70,7 @@ namespace BD_Reader.ViewModels
             columnList = new ObservableCollection<ColumnListItem>();
 
             SelectedTables = new List<Table>();
+            JoinedTable = new List<Dictionary<string, object?>>();
 
             Filters.Add(new Filter("", ColumnList));
         }
@@ -70,44 +78,98 @@ namespace BD_Reader.ViewModels
         public void UpdateColumnList()
         {
             ColumnList = new ObservableCollection<ColumnListItem>();
-            foreach (Table table in SelectedTables)
+            if (JoinedTable.Count != 0)
             {
-                foreach (var column in table.Properties)
+                foreach (var column in JoinedTable[0])
                 {
-                    ColumnList.Add(new ColumnListItem(table.Name, column));
+                    ColumnList.Add(new ColumnListItem(column.Key));
                 }
             }
             Filters.Clear();
             Filters.Add(new Filter("", ColumnList));
-            //if (SelectedTables.Count > 1)
-            //    JoinTables();
+        }
+
+        private bool TryJoin(string key1, List<Dictionary<string, object?>> table2, string key2)
+        {
+            try
+            {
+                JoinedTable = JoinedTable.Join(
+                    table2,
+                    firstItem => firstItem[key1],
+                    secondItem => secondItem[key2],
+                    (firstItem, secondItem) =>
+                    {
+                        Dictionary<string, object?> resultItem = new Dictionary<string, object?>();
+                        foreach (var item in firstItem)
+                        {
+                            resultItem.TryAdd(item.Key, item.Value);
+                        }
+                        foreach (var item in secondItem)
+                        {
+                            if (item.Key != key2)
+                                resultItem.TryAdd(item.Key, item.Value);
+                        }
+                        return resultItem;
+                    }
+                    ).ToList();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
         public void JoinTables()
         {
-            Dictionary<string, List<object?>> JoinedTable = new Dictionary<string, List<object?>>();
-            List<List<object?>> a = new List<List<object?>>();
-            if (SelectedTables[0].Name == "Drivers" && SelectedTables[1].Name == "Results")
+            if (SelectedTables.Count > 0)
             {
-                dynamic results = SelectedTables[1].TableView.GetTable();
-                foreach (Result result in results)
+                var check = SelectedTables.Where(tab => tab.Name == "Events");
+                if(check.Count() != 0)
                 {
-                    List<object> b = new List<object>();
-                    foreach (string prop in SelectedTables[1].Properties)
+                    Table tmp = check.Last();
+                    SelectedTables.Remove(check.Last());
+                    SelectedTables.Add(tmp);
+                }
+                JoinedTable = new List<Dictionary<string, object?>>(SelectedTables[0].Rows);
+                if (SelectedTables.Count > 1)
+                {
+                    List<Dictionary<string, object?>> joiningTable;
+                    bool success = false;
+                    for (int i = 1; i < SelectedTables.Count; i++)
                     {
-                        b.Add(result[prop]);
+                        joiningTable = SelectedTables[i].Rows;
+                        foreach (var keysPair in Keys)
+                        {
+                            success = TryJoin(keysPair.Key, joiningTable, keysPair.Value);
+                            if (success)
+                                break;
+                            else
+                            {
+                                success = TryJoin(keysPair.Value, joiningTable, keysPair.Key);
+                                if (success)
+                                    break;
+                            }
+                        }
+                        if (!success)
+                        {
+                            JoinedTable.Clear();
+                            UpdateColumnList();
+                            return;
+                        }
                     }
                 }
-
+                UpdateColumnList();
+            }
+            else
+            {
+                JoinedTable.Clear();
+                ColumnList.Clear();
             }
 
-
-            foreach (Table table in SelectedTables)
+            foreach(var item in JoinedTable)
             {
-                foreach(var item in table.TableValues)
-                {
-                    JoinedTable.TryAdd(item.Key, item.Value);
-                }
+                var a = item;
             }
         }
 
@@ -137,8 +199,8 @@ namespace BD_Reader.ViewModels
             Requests.Add(tables.Last<Table>());
         }
 
+        public List<Dictionary<string, object?>> JoinedTable { get; set; }
         public List<Table> SelectedTables { get; set; }
-
         public ObservableCollection<Filter> Filters
         {
             get => filters;

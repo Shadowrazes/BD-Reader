@@ -28,6 +28,11 @@ namespace BD_Reader.Models
             }
         }
 
+        public string Key()
+        {
+            return "Name";
+        }
+
         public virtual ICollection<Result> Results { get; set; }
     }
 }

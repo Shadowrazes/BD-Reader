@@ -27,6 +27,11 @@ namespace BD_Reader.Models
             }
         }
 
+        public string Key()
+        {
+            return "DriverFullName";
+        }
+
         public virtual Event? EventNameNavigation { get; set; }
     }
 }

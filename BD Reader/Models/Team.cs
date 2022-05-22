@@ -22,7 +22,7 @@ namespace BD_Reader.Models
             {
                 switch (property)
                 {
-                    case "Name": return Name;
+                    case "TeamName": return Name;
                     case "Years": return Years;
                     case "Championships": return Championships;
                     case "Points": return Points;
@@ -30,6 +30,11 @@ namespace BD_Reader.Models
                 }
                 return null;
             }
+        }
+
+        public string Key()
+        {
+            return "TeamName";
         }
 
         public virtual ICollection<Driver> Drivers { get; set; }

@@ -31,5 +31,19 @@ namespace BD_Reader.Views
                 }
             }
         }
+
+        private void SelectedTabChanged(object control, SelectionChangedEventArgs args)
+        {
+            TabControl? tabControl = control as TabControl;
+            if(tabControl != null)
+            {
+                DBViewerViewModel? context = this.DataContext as DBViewerViewModel;
+                Table? table = tabControl.SelectedItem as Table;
+                if (context != null && table != null)
+                {
+                    context.CurrentTableIsSubtable = table.IsSubTable;
+                }
+            }
+        }
     }
 }

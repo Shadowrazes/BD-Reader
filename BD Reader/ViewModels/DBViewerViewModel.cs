@@ -9,6 +9,7 @@ using BD_Reader.Models;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System;
+using Avalonia.Controls;
 
 namespace BD_Reader.ViewModels
 {
@@ -21,6 +22,7 @@ namespace BD_Reader.ViewModels
         private ObservableCollection<Result> results;
         private ObservableCollection<Team> teams;
         private ObservableCollection<Table> requests;
+        private bool currentTableIsSubtable;
 
         private ObservableCollection<string> FindProperties(string entityName, List<string> properties)
         {
@@ -34,7 +36,11 @@ namespace BD_Reader.ViewModels
                         i++;
                         while (properties[i].IndexOf("(") != -1 && i < properties.Count())
                         {
-                            result.Add(properties[i].Remove(properties[i].IndexOf("(")));
+                            string property = properties[i].Remove(properties[i].IndexOf("("));
+                            if(!(entityName == "Team" && property == "Name"))
+                                result.Add(property);
+                            else
+                                result.Add("TeamName");
                             i++;
                         }
                         return result;
@@ -54,7 +60,7 @@ namespace BD_Reader.ViewModels
             {
                 tables = new ObservableCollection<Table>();
                 requests = new ObservableCollection<Table>();
-                var DataBase = new WRCContext();
+                DataBase = new WRCContext();
 
                 string tableInfo = DataBase.Model.ToDebugString();
                 tableInfo = tableInfo.Replace(" ", "");
@@ -79,6 +85,8 @@ namespace BD_Reader.ViewModels
 
                 teams = new ObservableCollection<Team>(DataBase.Teams);
                 tables.Add(new Table("Teams", false, new TeamsTableViewModel(teams), FindProperties("Team", properties)));
+
+                CurrentTableIsSubtable = false;
             }
             catch
             {
@@ -86,6 +94,12 @@ namespace BD_Reader.ViewModels
             }
         }
 
+        public bool CurrentTableIsSubtable
+        {
+            get => !currentTableIsSubtable;
+            set => this.RaiseAndSetIfChanged(ref currentTableIsSubtable, value);
+        }
+        public WRCContext DataBase { get; set; }
         public ObservableCollection<Table> Tables
         {
             get => tables;
@@ -141,6 +155,23 @@ namespace BD_Reader.ViewModels
             {
                 this.RaiseAndSetIfChanged(ref requests, value);
             }
+        }
+
+        public void AddItem()
+        {
+            DataBase.Add(new Driver());
+            Drivers.Add(new Driver());
+        }
+
+        public void DeleteItem()
+        {
+
+        }
+
+        public void Save()
+        {
+            var a = Drivers;
+            DataBase.SaveChanges();
         }
     }
 }

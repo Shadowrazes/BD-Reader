@@ -64,7 +64,7 @@ namespace BD_Reader.Views
                         tables.Add(table as Table);
                     }
                     context.SelectedTables = tables;
-                    context.UpdateColumnList();
+                    context.JoinTables();
                 }
             }
         }

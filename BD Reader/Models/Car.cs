@@ -40,6 +40,11 @@ namespace BD_Reader.Models
             }
         }
 
+        public string Key()
+        {
+            return "Id";
+        }
+
         public virtual ICollection<Driver> Drivers { get; set; }
     }
 }

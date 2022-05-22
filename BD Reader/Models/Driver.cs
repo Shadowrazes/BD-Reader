@@ -5,6 +5,16 @@ namespace BD_Reader.Models
 {
     public partial class Driver
     {
+        public Driver()
+        {
+            FullName = "None";
+            CarId = 0;
+            TeamName = "None";
+            Age = 0;
+            Points = 0;
+            Starts = 0;
+            AvgFinish = 0;
+        }
         public string FullName { get; set; } = null!;
         public long? CarId { get; set; }
         public string? TeamName { get; set; }
@@ -29,6 +39,11 @@ namespace BD_Reader.Models
                 }
                 return null;
             }
+        }
+
+        public string Key()
+        {
+            return "FullName";
         }
 
         public virtual Car? Car { get; set; }
