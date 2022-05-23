@@ -15,12 +15,6 @@ namespace BD_Reader.ViewModels
 {
     public class QueryManagerViewModel : ViewModelBase
     {
-        abstract class Handler<T>
-        {
-            public Handler<T> NextHope { get; set; }
-            public abstract void Try(ObservableCollection<T> list);
-        }
-
         public class Filter
         {
             public Filter(string _BoolOper, ObservableCollection<ColumnListItem> _Columns)
@@ -53,11 +47,11 @@ namespace BD_Reader.ViewModels
         private ObservableCollection<Table> requests;
         private ObservableCollection<ColumnListItem> columnList;
         private ObservableCollection<Filter> filters;
-        private Dictionary<string, string> Keys = new Dictionary<string, string>()
+        internal Dictionary<string, string> Keys = new Dictionary<string, string>()
         {
-            { "CarId", "Id"},
-            { "FullName", "DriverFullName"},
-            { "EventName", "Name"},
+            { "CarId", "CarId"},
+            { "DriverFullName", "DriverFullName"},
+            { "EventName", "EventName"},
             { "TeamName", "TeamName"}
         };
 
@@ -73,6 +67,7 @@ namespace BD_Reader.ViewModels
             JoinedTable = new List<Dictionary<string, object?>>();
 
             Filters.Add(new Filter("", ColumnList));
+            Join = new JoinHandler(this);
         }
 
         public void UpdateColumnList()
@@ -87,90 +82,6 @@ namespace BD_Reader.ViewModels
             }
             Filters.Clear();
             Filters.Add(new Filter("", ColumnList));
-        }
-
-        private bool TryJoin(string key1, List<Dictionary<string, object?>> table2, string key2)
-        {
-            try
-            {
-                JoinedTable = JoinedTable.Join(
-                    table2,
-                    firstItem => firstItem[key1],
-                    secondItem => secondItem[key2],
-                    (firstItem, secondItem) =>
-                    {
-                        Dictionary<string, object?> resultItem = new Dictionary<string, object?>();
-                        foreach (var item in firstItem)
-                        {
-                            resultItem.TryAdd(item.Key, item.Value);
-                        }
-                        foreach (var item in secondItem)
-                        {
-                            if (item.Key != key2)
-                                resultItem.TryAdd(item.Key, item.Value);
-                        }
-                        return resultItem;
-                    }
-                    ).ToList();
-            }
-            catch
-            {
-                return false;
-            }
-            return true;
-        }
-
-        public void JoinTables()
-        {
-            if (SelectedTables.Count > 0)
-            {
-                var check = SelectedTables.Where(tab => tab.Name == "Events");
-                if(check.Count() != 0)
-                {
-                    Table tmp = check.Last();
-                    SelectedTables.Remove(check.Last());
-                    SelectedTables.Add(tmp);
-                }
-                JoinedTable = new List<Dictionary<string, object?>>(SelectedTables[0].Rows);
-                if (SelectedTables.Count > 1)
-                {
-                    List<Dictionary<string, object?>> joiningTable;
-                    bool success = false;
-                    for (int i = 1; i < SelectedTables.Count; i++)
-                    {
-                        joiningTable = SelectedTables[i].Rows;
-                        foreach (var keysPair in Keys)
-                        {
-                            success = TryJoin(keysPair.Key, joiningTable, keysPair.Value);
-                            if (success)
-                                break;
-                            else
-                            {
-                                success = TryJoin(keysPair.Value, joiningTable, keysPair.Key);
-                                if (success)
-                                    break;
-                            }
-                        }
-                        if (!success)
-                        {
-                            JoinedTable.Clear();
-                            UpdateColumnList();
-                            return;
-                        }
-                    }
-                }
-                UpdateColumnList();
-            }
-            else
-            {
-                JoinedTable.Clear();
-                ColumnList.Clear();
-            }
-
-            foreach(var item in JoinedTable)
-            {
-                var a = item;
-            }
         }
 
         public void AddFilterOR()
@@ -197,6 +108,14 @@ namespace BD_Reader.ViewModels
             }
             tables.Add(new Table(tableName, true, new QueryTableViewModel(list), new ObservableCollection<string>()));
             Requests.Add(tables.Last<Table>());
+        }
+
+        public void ClearAll()
+        {
+            JoinedTable.Clear();
+            SelectedTables.Clear();
+            Filters.Clear();
+            ColumnList.Clear();
         }
 
         public List<Dictionary<string, object?>> JoinedTable { get; set; }
@@ -234,5 +153,7 @@ namespace BD_Reader.ViewModels
             }
         }
         public DBViewerViewModel DBViewer { get; }
+
+        public JoinHandler Join { get; set; }
     }
 }

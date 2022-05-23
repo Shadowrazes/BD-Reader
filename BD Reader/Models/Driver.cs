@@ -29,7 +29,7 @@ namespace BD_Reader.Models
             {
                 switch (property)
                 {
-                    case "FullName": return FullName;
+                    case "DriverFullName": return FullName;
                     case "CarId": return CarId;
                     case "TeamName": return TeamName;
                     case "Age": return Age;
@@ -43,7 +43,7 @@ namespace BD_Reader.Models
 
         public string Key()
         {
-            return "FullName";
+            return "DriverFullName";
         }
 
         public virtual Car? Car { get; set; }

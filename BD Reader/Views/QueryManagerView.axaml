@@ -142,6 +142,6 @@
 		</Expander>
 		<TextBox Name="RequestName" Watermark="Request Name" KeyUp="RequestNameChanged" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4"/>
 		<Button Name="Accept" Click="AddRequest" Classes="gridBtn" IsEnabled="False" Content="Accept" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4"/>
-		<Button Classes="gridBtn" Command="{Binding $parent[Window].DataContext.OpenDBViewer}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Content="Back to DB Viewer"/>
+		<Button Classes="gridBtn" Click="BackToViewer" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4" Content="Back to DB Viewer"/>
 	</Grid>
 </UserControl>

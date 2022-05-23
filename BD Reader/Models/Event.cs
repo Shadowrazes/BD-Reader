@@ -20,7 +20,7 @@ namespace BD_Reader.Models
             {
                 switch (property)
                 {
-                    case "Name": return Name;
+                    case "EventName": return Name;
                     case "Date": return Date;
                     case "Track": return Track;
                 }
@@ -30,7 +30,7 @@ namespace BD_Reader.Models
 
         public string Key()
         {
-            return "Name";
+            return "EventName";
         }
 
         public virtual ICollection<Result> Results { get; set; }

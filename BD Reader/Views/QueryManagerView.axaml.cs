@@ -34,20 +34,23 @@ namespace BD_Reader.Views
             TextBox? requestName = control as TextBox;
             if(requestName != null)
             {
-                var context = this.DataContext as QueryManagerViewModel;
-                bool tableExist = false;
-                foreach(var table in context.Tables)
+                QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+                if (context != null)
                 {
-                    if(table.Name == requestName.Text)
+                    bool tableExist = false;
+                    foreach (Table table in context.Tables)
                     {
-                        tableExist = true;
-                        break;
+                        if (table.Name == requestName.Text)
+                        {
+                            tableExist = true;
+                            break;
+                        }
                     }
+                    if (requestName.Text != "" && !tableExist)
+                        this.FindControl<Button>("Accept").IsEnabled = true;
+                    else
+                        this.FindControl<Button>("Accept").IsEnabled = false;
                 }
-                if (requestName.Text != "" && !tableExist)
-                    this.FindControl<Button>("Accept").IsEnabled = true;
-                else
-                    this.FindControl<Button>("Accept").IsEnabled = false;
             }
         }
         private void TableSelected(object control, SelectionChangedEventArgs args)
@@ -55,17 +58,27 @@ namespace BD_Reader.Views
             ListBox? tablesList = control as ListBox;
             if(tablesList != null)
             {
-                var context = this.DataContext as QueryManagerViewModel;
+                QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
                 if(context != null)
                 {
                     List<Table> tables = new List<Table>();
-                    foreach (var table in tablesList.SelectedItems)
+                    foreach (Table table in tablesList.SelectedItems)
                     {
-                        tables.Add(table as Table);
+                        tables.Add(table);
                     }
                     context.SelectedTables = tables;
-                    context.JoinTables();
+                    context.Join.Try();
                 }
+            }
+        }
+        private void BackToViewer(object control, RoutedEventArgs args)
+        {
+            QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+            MainWindowViewModel? parentContext = this.Parent.DataContext as MainWindowViewModel;
+            if (context != null && parentContext != null)
+            {
+                context.ClearAll();
+                parentContext.OpenDBViewer();
             }
         }
     }

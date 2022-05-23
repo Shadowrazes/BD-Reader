@@ -37,10 +37,22 @@ namespace BD_Reader.ViewModels
                         while (properties[i].IndexOf("(") != -1 && i < properties.Count())
                         {
                             string property = properties[i].Remove(properties[i].IndexOf("("));
-                            if(!(entityName == "Team" && property == "Name"))
-                                result.Add(property);
-                            else
+                            if (entityName == "Team" && property == "Name")
                                 result.Add("TeamName");
+                            else if (entityName == "Event" && property == "Name")
+                                result.Add("EventName");
+                            else if (entityName == "Driver" && property == "FullName")
+                                result.Add("DriverFullName");
+                            else if (entityName == "Car" && property == "Id")
+                                result.Add("CarId");
+                            else
+                                result.Add(property);
+
+
+                            //if(!(entityName == "Team" && property == "Name"))
+                            //    result.Add(property);
+                            //else
+                            //    result.Add("TeamName");
                             i++;
                         }
                         return result;

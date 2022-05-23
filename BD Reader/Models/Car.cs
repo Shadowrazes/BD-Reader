@@ -30,7 +30,7 @@ namespace BD_Reader.Models
             {
                 switch (property)
                 {
-                    case "Id": return Id;
+                    case "CarId": return Id;
                     case "Number": return Number;
                     case "Engine": return Engine;
                     case "Chassis": return Chassis;
@@ -42,7 +42,7 @@ namespace BD_Reader.Models
 
         public string Key()
         {
-            return "Id";
+            return "CarId";
         }
 
         public virtual ICollection<Driver> Drivers { get; set; }
