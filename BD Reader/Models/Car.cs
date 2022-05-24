@@ -15,8 +15,8 @@ namespace BD_Reader.Models
         public long? Number { get; set; }
         public string? Engine { get; set; }
         public string? Chassis { get; set; }
-        public string? Class 
-        { 
+        public string? Class
+        {
             get => claass;
             set
             {

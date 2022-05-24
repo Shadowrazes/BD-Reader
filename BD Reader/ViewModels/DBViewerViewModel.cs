@@ -102,7 +102,7 @@ namespace BD_Reader.ViewModels
             }
             catch
             {
-                var a = 0;
+                
             }
         }
 

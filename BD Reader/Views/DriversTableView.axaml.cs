@@ -28,7 +28,7 @@ namespace BD_Reader.Views
         }
         private void DeleteNullColumn(object control, DataGridAutoGeneratingColumnEventArgs args)
         {   
-            if (args.PropertyName == "Car" || args.PropertyName == "TeamNameNavigation" || args.PropertyName == "Item")
+            if (args.PropertyName == "Car" || args.PropertyName == "Results" || args.PropertyName == "TeamNameNavigation" || args.PropertyName == "Item")
             {
                 args.Cancel = true;
             }

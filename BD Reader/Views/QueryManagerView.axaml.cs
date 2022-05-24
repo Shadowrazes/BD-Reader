@@ -6,6 +6,7 @@ using BD_Reader.ViewModels;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using Avalonia.Interactivity;
+using System.Linq;
 
 namespace BD_Reader.Views
 {
@@ -67,8 +68,70 @@ namespace BD_Reader.Views
                         tables.Add(table);
                     }
                     context.SelectedTables = tables;
-                    context.Join.Try();
+                    context.Join();
                 }
+            }
+        }
+        public void AddFilterOR(object control, RoutedEventArgs args)
+        {
+            QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+            Button? button = control as Button;
+            if (context != null && button != null)
+            {
+                string? type = button.CommandParameter as string;
+                if (type == "Default")
+                {
+                    context.Filters.Add(new Filter("OR", context.ColumnList));
+                    this.FindControl<Button>("FilterAND").IsEnabled = false;
+                }
+                else
+                {
+                    context.GroupFilters.Add(new Filter("OR", context.ColumnList));
+                    this.FindControl<Button>("GroupFilterAND").IsEnabled = false;
+                }
+            }
+        }
+        public void AddFilterAND(object control, RoutedEventArgs args)
+        {
+            QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+            Button? button = control as Button;
+            if (context != null && button != null)
+            {
+                string? type = button.CommandParameter as string;
+                if (type == "Default")
+                {
+                    context.Filters.Add(new Filter("AND", context.ColumnList));
+                    this.FindControl<Button>("FilterOR").IsEnabled = false;
+                }
+                else
+                {
+                    context.GroupFilters.Add(new Filter("AND", context.ColumnList));
+                    this.FindControl<Button>("GroupFilterOR").IsEnabled = false;
+                }
+            }
+        }
+        public void PopBackFilter(object control, RoutedEventArgs args)
+        {
+            QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+            Button? button = control as Button;
+            if (context != null && button != null)
+            {
+                string? type = button.CommandParameter as string;
+                if (context.Filters.Count > 1 && type == "Default")
+                    context.Filters.Remove(context.Filters.Last());
+                else if (context.GroupFilters.Count > 1 && type == "Group")
+                    context.GroupFilters.Remove(context.GroupFilters.Last());
+
+                if (context.Filters.Count == 1 && type == "Default")
+                {
+                    this.FindControl<Button>("FilterOR").IsEnabled = true;
+                    this.FindControl<Button>("FilterAND").IsEnabled = true;
+                }  
+                else if (context.GroupFilters.Count == 1 && type == "Group")
+                {
+                    this.FindControl<Button>("GroupFilterOR").IsEnabled = true;
+                    this.FindControl<Button>("GroupFilterAND").IsEnabled = true;
+                }  
             }
         }
         private void BackToViewer(object control, RoutedEventArgs args)

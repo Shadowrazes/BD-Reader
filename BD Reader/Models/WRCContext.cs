@@ -87,6 +87,11 @@ namespace BD_Reader.Models
 
                 entity.Property(e => e.Time).HasColumnType("DATETIME");
 
+                entity.HasOne(d => d.DriverFullNameNavigation)
+                    .WithMany(p => p.Results)
+                    .HasForeignKey(d => d.DriverFullName)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
                 entity.HasOne(d => d.EventNameNavigation)
                     .WithMany(p => p.Results)
                     .HasForeignKey(d => d.EventName);

@@ -24,15 +24,14 @@
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="{Binding TableName}"/>
-							<TextBlock Text="{Binding ColumnName}"/>
+							<TextBlock Text="{Binding}"/>
 						</StackPanel>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</Expander>
-		<Expander Header="With Filter" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2">
-			<Grid RowDefinitions="auto, 40" ColumnDefinitions="*">
+		<Expander Header="With Filter" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" VerticalContentAlignment="Stretch">
+			<Grid RowDefinitions="*, 40" ColumnDefinitions="*">
 				<DataGrid Grid.Row="0" Grid.Column="0" Name="FlterList" Items="{Binding Filters}" CanUserReorderColumns="False">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="AND|OR" Width="*">
@@ -75,9 +74,9 @@
 					</DataGrid.Columns>
 				</DataGrid>
 				<Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*" ColumnDefinitions="*, *, *">
-					<Button Classes="gridBtn" Command="{Binding AddFilterAND}" Content="AND" Grid.Row="0" Grid.Column="0"/>
-					<Button Classes="gridBtn" Command="{Binding AddFilterOR}" Content="OR" Grid.Row="0" Grid.Column="1"/>
-					<Button Classes="gridBtn" Content="PopBack" Grid.Row="0" Grid.Column="2"/>
+					<Button Name="FilterAND" Classes="gridBtn" Click="AddFilterAND" CommandParameter="Default" Content="AND" Grid.Row="0" Grid.Column="0"/>
+					<Button Name="FilterOR" Classes="gridBtn" Click="AddFilterOR" CommandParameter="Default" Content="OR" Grid.Row="0" Grid.Column="1"/>
+					<Button Name="FilterPop" Classes="gridBtn" Click="PopBackFilter" CommandParameter="Default" Content="PopBack" Grid.Row="0" Grid.Column="2"/>
 				</Grid>
 			</Grid>
 		</Expander>
@@ -90,9 +89,9 @@
 				</ListBox.ItemTemplate>
 			</ListBox>
 		</Expander>
-		<Expander Header="With Group Filter" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" ExpandDirection="Up">
+		<Expander Header="With Group Filter" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" VerticalContentAlignment="Stretch" ExpandDirection="Up">
 			<Grid RowDefinitions="*, 40" ColumnDefinitions="*">
-				<DataGrid Grid.Row="0" Grid.Column="0" Name="GroupFlterList" Items="{Binding Filters}" CanUserReorderColumns="False">
+				<DataGrid Grid.Row="0" Grid.Column="0" Name="GroupFlterList" Items="{Binding GroupFilters}" CanUserReorderColumns="False">
 					<DataGrid.Columns>
 						<DataGridTemplateColumn Header="AND|OR" Width="*">
 							<DataGridTemplateColumn.CellTemplate>
@@ -125,9 +124,9 @@
 					</DataGrid.Columns>
 				</DataGrid>
 				<Grid Grid.Row="1" Grid.Column="0" RowDefinitions="*" ColumnDefinitions="*, *, *">
-					<Button Classes="gridBtn" Content="AND" Grid.Row="0" Grid.Column="0"/>
-					<Button Classes="gridBtn" Content="OR" Grid.Row="0" Grid.Column="1"/>
-					<Button Classes="gridBtn" Content="PopBack" Grid.Row="0" Grid.Column="2"/>
+					<Button Name="GroupFilterAND" Classes="gridBtn" Click="AddFilterAND" CommandParameter="Group" Content="AND" Grid.Row="0" Grid.Column="0"/>
+					<Button Name="GroupFilterOR" Classes="gridBtn" Click="AddFilterOR" CommandParameter="Group" Content="OR" Grid.Row="0" Grid.Column="1"/>
+					<Button Name="GroupFilterPop" Classes="gridBtn" Click="PopBackFilter" CommandParameter="Group" Content="PopBack" Grid.Row="0" Grid.Column="2"/>
 				</Grid>
 			</Grid>
 		</Expander>

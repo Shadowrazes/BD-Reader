@@ -7,6 +7,7 @@ namespace BD_Reader.Models
     {
         public Driver()
         {
+            Results = new HashSet<Result>();
             FullName = "None";
             CarId = 0;
             TeamName = "None";
@@ -15,6 +16,7 @@ namespace BD_Reader.Models
             Starts = 0;
             AvgFinish = 0;
         }
+
         public string FullName { get; set; } = null!;
         public long? CarId { get; set; }
         public string? TeamName { get; set; }
@@ -48,5 +50,6 @@ namespace BD_Reader.Models
 
         public virtual Car? Car { get; set; }
         public virtual Team? TeamNameNavigation { get; set; }
+        public virtual ICollection<Result> Results { get; set; }
     }
 }
