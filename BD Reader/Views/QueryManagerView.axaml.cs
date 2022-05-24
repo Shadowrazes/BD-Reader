@@ -35,7 +35,7 @@ namespace BD_Reader.Views
                     break;
                 }
             }
-            if (RequestName.Text != "" && !tableExist)
+            if (RequestName.Text != "" && RequestName.Text != null && !tableExist)
                 this.FindControl<Button>("Accept").IsEnabled = true;
             else
                 this.FindControl<Button>("Accept").IsEnabled = false;

@@ -164,6 +164,7 @@ namespace BD_Reader.ViewModels
                         if (!success)
                         {
                             JoinedTable.Clear();
+                            ResultTable = JoinedTable;
                             UpdateColumnList();
                             return;
                         }
@@ -175,6 +176,7 @@ namespace BD_Reader.ViewModels
             else
             {
                 JoinedTable.Clear();
+                ResultTable = JoinedTable;
                 ColumnList.Clear();
             }
         }
