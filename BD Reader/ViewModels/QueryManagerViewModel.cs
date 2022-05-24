@@ -21,6 +21,7 @@ namespace BD_Reader.ViewModels
         private ObservableCollection<string> columnList;
         private ObservableCollection<Filter> filters;
         private ObservableCollection<Filter> groupFilters;
+        private MainWindowViewModel mainWindow;
         internal Dictionary<string, string> Keys = new Dictionary<string, string>()
         {
             { "CarId", "CarId"},
@@ -29,9 +30,10 @@ namespace BD_Reader.ViewModels
             { "TeamName", "TeamName"}
         };
 
-        public QueryManagerViewModel(DBViewerViewModel _DBViewer)
+        public QueryManagerViewModel(DBViewerViewModel _DBViewer, MainWindowViewModel _mainWindow)
         {
             DbViewer = _DBViewer;
+            mainWindow = _mainWindow;
             tables = DbViewer.Tables;
             allTables = DbViewer.AllTables;
             requests = new ObservableCollection<Table>();
@@ -41,7 +43,10 @@ namespace BD_Reader.ViewModels
 
             SelectedTables = new ObservableCollection<Table>();
             SelectedColumns = new ObservableCollection<string>();
+
+            ResultTable = new List<Dictionary<string, object?>>();
             JoinedTable = new List<Dictionary<string, object?>>();
+            SelectedColumnsTable = new List<Dictionary<string, object?>>();
         }
 
         public void UpdateColumnList()
@@ -60,18 +65,20 @@ namespace BD_Reader.ViewModels
 
         public void AddRequest(string tableName)
         {
-            List<List<object>> list = new List<List<object>>();
-            for (int j = 0; j < 15; j++)
-            {
-                List<object> a = new List<object>();
-                for (int i = 0; i < 15; i++)
-                {
-                    a.Add("Ok" + i.ToString());
-                }
-                list.Add(a);
-            }
-            Requests.Add(new Table(tableName, true, new QueryTableViewModel(list), new ObservableCollection<string>()));
+            //List<List<object>> list = new List<List<object>>();
+            //for (int j = 0; j < 15; j++)
+            //{
+            //    List<object> a = new List<object>();
+            //    for (int i = 0; i < 15; i++)
+            //    {
+            //        a.Add("Ok" + i.ToString());
+            //    }
+            //    list.Add(a);
+            //}
+            Requests.Add(new Table(tableName, true, new QueryTableViewModel(ResultTable.ToList()), new ObservableCollection<string>()));
             AllTables.Add(Requests.Last());
+            ClearAll();
+            mainWindow.OpenDBViewer();
         }
 
         public void DeleteRequests()
@@ -82,7 +89,9 @@ namespace BD_Reader.ViewModels
 
         public void ClearAll()
         {
+            ResultTable.Clear();
             JoinedTable.Clear();
+            SelectedColumnsTable.Clear();
             SelectedTables.Clear();
             SelectedColumns.Clear();
             Filters.Clear();
@@ -161,6 +170,7 @@ namespace BD_Reader.ViewModels
                     }
                 }
                 UpdateColumnList();
+                ResultTable = JoinedTable;
             }
             else
             {
@@ -169,8 +179,26 @@ namespace BD_Reader.ViewModels
             }
         }
 
+        public void Select()
+        {
+            SelectedColumnsTable = JoinedTable.Select(item =>
+            {
+                return new Dictionary<string, object?>(item.Where(property => SelectedColumns.Any(column => column == property.Key)));
+            }).ToList();
+            ResultTable = SelectedColumnsTable;
+        }
+
+        public List<Dictionary<string, object?>> ResultTable { get; set; }
         public List<Dictionary<string, object?>> JoinedTable { get; set; }
-        public ObservableCollection<Table> SelectedTables { get; set; }
+        public List<Dictionary<string, object?>> SelectedColumnsTable { get; set; }
+        public ObservableCollection<string> ColumnList
+        {
+            get => columnList;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref columnList, value);
+            }
+        }
         public ObservableCollection<string> SelectedColumns { get; set; }
         public ObservableCollection<Filter> Filters
         {
@@ -188,14 +216,6 @@ namespace BD_Reader.ViewModels
                 this.RaiseAndSetIfChanged(ref groupFilters, value);
             }
         }
-        public ObservableCollection<string> ColumnList
-        {
-            get => columnList;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref columnList, value);
-            }
-        }
         public ObservableCollection<Table> Tables
         {
             get => tables;
@@ -204,6 +224,7 @@ namespace BD_Reader.ViewModels
                 this.RaiseAndSetIfChanged(ref tables, value);
             }
         }
+        public ObservableCollection<Table> SelectedTables { get; set; }
         public ObservableCollection<Table> AllTables
         {
             get => allTables;

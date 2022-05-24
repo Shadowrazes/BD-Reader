@@ -29,7 +29,7 @@ namespace BD_Reader.ViewModels
         public MainWindowViewModel()
         {
             dbViewer = new DBViewerViewModel();
-            queryManager = new QueryManagerViewModel(dbViewer);
+            queryManager = new QueryManagerViewModel(dbViewer, this);
             Page = dbViewer;
         }
 

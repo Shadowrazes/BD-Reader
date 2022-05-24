@@ -79,7 +79,6 @@ namespace BD_Reader.ViewModels
                 List<string> properties = new List<string>(splitTableInfo.Where(str => str.IndexOf("Entity") != -1 ||
                                                             (str.IndexOf("(") != -1 && str.IndexOf("<") == -1) &&
                                                             str.IndexOf("Navigation") == -1 && str.IndexOf("(Car)") == -1));
-               
 
 
                 drivers = new ObservableCollection<Driver>(DataBase.Drivers);

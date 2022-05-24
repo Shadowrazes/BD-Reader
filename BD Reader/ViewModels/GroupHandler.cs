@@ -9,6 +9,7 @@ using BD_Reader.Models;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System;
+
 namespace BD_Reader.ViewModels
 {
     public class GroupHandler: Handler

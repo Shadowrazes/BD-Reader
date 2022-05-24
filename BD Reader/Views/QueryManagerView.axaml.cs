@@ -21,8 +21,25 @@ namespace BD_Reader.Views
             GroupFilterAND = this.FindControl<Button>("GroupFilterAND");
             GroupFilterOR = this.FindControl<Button>("GroupFilterOR");
             GroupFilterPop = this.FindControl<Button>("GroupFilterPop");
+            RequestName = this.FindControl<TextBox>("RequestName");
         }
 
+        private void IsTableExist(QueryManagerViewModel context)
+        {
+            bool tableExist = false;
+            foreach (Table table in context.AllTables)
+            {
+                if (table.Name == RequestName.Text)
+                {
+                    tableExist = true;
+                    break;
+                }
+            }
+            if (RequestName.Text != "" && !tableExist)
+                this.FindControl<Button>("Accept").IsEnabled = true;
+            else
+                this.FindControl<Button>("Accept").IsEnabled = false;
+        }
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
@@ -44,19 +61,14 @@ namespace BD_Reader.Views
                 QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
                 if (context != null)
                 {
-                    bool tableExist = false;
-                    foreach (Table table in context.Tables)
+                    if (context.ResultTable.Count == 0)
                     {
-                        if (table.Name == requestName.Text)
-                        {
-                            tableExist = true;
-                            break;
-                        }
-                    }
-                    if (requestName.Text != "" && !tableExist)
-                        this.FindControl<Button>("Accept").IsEnabled = true;
-                    else
                         this.FindControl<Button>("Accept").IsEnabled = false;
+                    }
+                    else
+                    {
+                        IsTableExist(context);
+                    }
                 }
             }
         }
@@ -74,6 +86,15 @@ namespace BD_Reader.Views
                         context.SelectedTables.Add(table);
                     }
                     context.Join();
+
+                    if (context.ResultTable.Count == 0)
+                    {
+                        this.FindControl<Button>("Accept").IsEnabled = false;
+                    }
+                    else
+                    {
+                        IsTableExist(context);
+                    }
                 }
             }
         }
@@ -94,7 +115,18 @@ namespace BD_Reader.Views
                     {
                         context.SelectedColumns.Add(column);
                     }
-                    if(context.SelectedColumns.Count != 0)
+                    context.Select();
+
+                    if (context.ResultTable.Count == 0)
+                    {
+                        this.FindControl<Button>("Accept").IsEnabled = false;
+                    }
+                    else
+                    {
+                        IsTableExist(context);
+                    }
+
+                    if (context.SelectedColumns.Count != 0)
                     {
                         FilterAND.IsEnabled = true;
                         FilterOR.IsEnabled = true;

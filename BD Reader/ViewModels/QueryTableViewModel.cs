@@ -15,9 +15,37 @@ namespace BD_Reader.ViewModels
     public class QueryTableViewModel : MainWindowViewModel
     {
         private List<List<object>> queryList;
-        public QueryTableViewModel(List<List<object>> _queryList)
+        public QueryTableViewModel(List<Dictionary<string, object?>> _queryDict)
         {
-            queryList = _queryList;
+            queryList = new List<List<object>>();
+
+            List<string> properties = new List<string>();
+            foreach (var property in _queryDict[0])
+            {
+                properties.Add(property.Key);
+            }
+
+            foreach (string property in properties)
+            {
+                List<object> values = new List<object>();
+                values.Add(property + "    ");
+                values.Add(" ");
+                foreach (Dictionary<string, object?> item in _queryDict)
+                {
+                    values.Add(item[property]);
+                }
+                queryList.Add(values);
+            }
+
+            //foreach (Dictionary<string, object?> items in _queryDict)
+            //{
+            //    List<object> values = new List<object>();
+            //    foreach(var item in items)
+            //    {
+            //        values.Add(item.Value);
+            //    }
+            //    queryList.Add(values);
+            //}
         }
 
         public List<List<object>> QueryList
