@@ -16,6 +16,7 @@ namespace BD_Reader.ViewModels
     {
         private DBViewerViewModel DbViewer;
         private ObservableCollection<Table> tables;
+        private ObservableCollection<Table> allTables;
         private ObservableCollection<Table> requests;
         private ObservableCollection<string> columnList;
         private ObservableCollection<Filter> filters;
@@ -32,6 +33,7 @@ namespace BD_Reader.ViewModels
         {
             DbViewer = _DBViewer;
             tables = DbViewer.Tables;
+            allTables = DbViewer.AllTables;
             requests = new ObservableCollection<Table>();
             filters = new ObservableCollection<Filter>();
             groupFilters = new ObservableCollection<Filter>();
@@ -69,12 +71,12 @@ namespace BD_Reader.ViewModels
                 list.Add(a);
             }
             Requests.Add(new Table(tableName, true, new QueryTableViewModel(list), new ObservableCollection<string>()));
-            Tables.Add(Requests.Last());
+            AllTables.Add(Requests.Last());
         }
 
         public void DeleteRequests()
         {
-            Requests = new ObservableCollection<Table>(Requests.Where(table => Tables.Any(tables => tables.Name == table.Name)));
+            Requests = new ObservableCollection<Table>(Requests.Where(table => AllTables.Any(tables => tables.Name == table.Name)));
             GC.Collect();
         }
 
@@ -200,6 +202,14 @@ namespace BD_Reader.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref tables, value);
+            }
+        }
+        public ObservableCollection<Table> AllTables
+        {
+            get => allTables;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref allTables, value);
             }
         }
         public ObservableCollection<Table> Requests

@@ -16,6 +16,7 @@ namespace BD_Reader.ViewModels
     public class DBViewerViewModel : ViewModelBase
     {
         private ObservableCollection<Table> tables;
+        private ObservableCollection<Table> allTables;
         private ObservableCollection<Driver> drivers;
         private ObservableCollection<Car> cars;
         private ObservableCollection<Event> events;
@@ -96,6 +97,8 @@ namespace BD_Reader.ViewModels
                 teams = new ObservableCollection<Team>(DataBase.Teams);
                 tables.Add(new Table("Teams", false, new TeamsTableViewModel(teams), FindProperties("Team", properties)));
 
+                AllTables = new ObservableCollection<Table>(Tables.ToList());
+
                 CurrentTableIsSubtable = false;
             }
             catch
@@ -116,6 +119,14 @@ namespace BD_Reader.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref tables, value);
+            }
+        }
+        public ObservableCollection<Table> AllTables
+        {
+            get => allTables;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref allTables, value);
             }
         }
         public ObservableCollection<Driver> Drivers

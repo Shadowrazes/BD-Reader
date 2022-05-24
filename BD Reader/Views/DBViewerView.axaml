@@ -10,7 +10,7 @@
 	</UserControl.Styles>
 
 	<Grid RowDefinitions="*, auto, 50" ColumnDefinitions="*, *, *" >
-		<TabControl Grid.Row="0" Grid.Column="0" Items="{Binding Tables}" SelectionChanged="SelectedTabChanged" Grid.ColumnSpan="3">
+		<TabControl Grid.Row="0" Grid.Column="0" Items="{Binding AllTables}" SelectionChanged="SelectedTabChanged" Grid.ColumnSpan="3">
 			<TabControl.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">

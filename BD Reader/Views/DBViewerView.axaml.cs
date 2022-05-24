@@ -27,7 +27,7 @@ namespace BD_Reader.Views
                 DBViewerViewModel? context = this.DataContext as DBViewerViewModel;
                 if (context != null)
                 {
-                    context.Tables.Remove(btn.DataContext as Table);
+                    context.AllTables.Remove(btn.DataContext as Table);
                     GC.Collect();
                 }
             }
