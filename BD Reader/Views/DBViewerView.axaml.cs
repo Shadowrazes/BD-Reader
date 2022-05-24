@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Interactivity;
 using BD_Reader.ViewModels;
+using System;
 
 namespace BD_Reader.Views
 {
@@ -27,7 +28,7 @@ namespace BD_Reader.Views
                 if (context != null)
                 {
                     context.Tables.Remove(btn.DataContext as Table);
-                    context.Requests.Remove(btn.DataContext as Table);
+                    GC.Collect();
                 }
             }
         }

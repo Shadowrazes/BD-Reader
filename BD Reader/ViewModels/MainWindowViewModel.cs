@@ -36,6 +36,7 @@ namespace BD_Reader.ViewModels
         public void OpenQueryManager()
         {
             Page = queryManager;
+            queryManager.DeleteRequests();
             //Observable.Merge().Take(1)
             //    .Subscribe((note) =>
             //    {

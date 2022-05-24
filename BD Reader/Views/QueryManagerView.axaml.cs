@@ -15,6 +15,12 @@ namespace BD_Reader.Views
         public QueryManagerView()
         {
             InitializeComponent();
+            FilterAND = this.FindControl<Button>("FilterAND");
+            FilterOR = this.FindControl<Button>("FilterOR");
+            FilterPop = this.FindControl<Button>("FilterPop");
+            GroupFilterAND = this.FindControl<Button>("GroupFilterAND");
+            GroupFilterOR = this.FindControl<Button>("GroupFilterOR");
+            GroupFilterPop = this.FindControl<Button>("GroupFilterPop");
         }
 
         private void InitializeComponent()
@@ -62,13 +68,50 @@ namespace BD_Reader.Views
                 QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
                 if(context != null)
                 {
-                    List<Table> tables = new List<Table>();
+                    context.SelectedTables = new ObservableCollection<Table>();
                     foreach (Table table in tablesList.SelectedItems)
                     {
-                        tables.Add(table);
+                        context.SelectedTables.Add(table);
                     }
-                    context.SelectedTables = tables;
                     context.Join();
+                }
+            }
+        }
+        private void ColumnSelected(object control, SelectionChangedEventArgs args)
+        {
+            ListBox? tablesList = control as ListBox;
+            if (tablesList != null)
+            {
+                QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+                if (context != null)
+                {
+                    context.SelectedColumns = new ObservableCollection<string>();
+                    context.Filters.Clear();
+                    context.GroupFilters.Clear();
+                    context.Filters.Add(new Filter("", context.SelectedColumns));
+                    context.GroupFilters.Add(new Filter("", context.SelectedColumns));
+                    foreach (string column in tablesList.SelectedItems)
+                    {
+                        context.SelectedColumns.Add(column);
+                    }
+                    if(context.SelectedColumns.Count != 0)
+                    {
+                        FilterAND.IsEnabled = true;
+                        FilterOR.IsEnabled = true;
+                        FilterPop.IsEnabled = true;
+                        GroupFilterAND.IsEnabled = true;
+                        GroupFilterOR.IsEnabled = true;
+                        GroupFilterPop.IsEnabled = true;
+                    }
+                    else
+                    {
+                        FilterAND.IsEnabled = false;
+                        FilterOR.IsEnabled = false;
+                        FilterPop.IsEnabled = false;
+                        GroupFilterAND.IsEnabled = false;
+                        GroupFilterOR.IsEnabled = false;
+                        GroupFilterPop.IsEnabled = false;
+                    }
                 }
             }
         }
@@ -81,13 +124,15 @@ namespace BD_Reader.Views
                 string? type = button.CommandParameter as string;
                 if (type == "Default")
                 {
-                    context.Filters.Add(new Filter("OR", context.ColumnList));
-                    this.FindControl<Button>("FilterAND").IsEnabled = false;
+                    context.Filters.Add(new Filter("OR", context.SelectedColumns));
+                    FilterAND.IsEnabled = false;
+                    FilterPop.IsEnabled = true;
                 }
                 else
                 {
-                    context.GroupFilters.Add(new Filter("OR", context.ColumnList));
-                    this.FindControl<Button>("GroupFilterAND").IsEnabled = false;
+                    context.GroupFilters.Add(new Filter("OR", context.SelectedColumns));
+                    GroupFilterAND.IsEnabled = false;
+                    GroupFilterPop.IsEnabled = true;
                 }
             }
         }
@@ -100,13 +145,15 @@ namespace BD_Reader.Views
                 string? type = button.CommandParameter as string;
                 if (type == "Default")
                 {
-                    context.Filters.Add(new Filter("AND", context.ColumnList));
-                    this.FindControl<Button>("FilterOR").IsEnabled = false;
+                    context.Filters.Add(new Filter("AND", context.SelectedColumns));
+                    FilterOR.IsEnabled = false;
+                    FilterPop.IsEnabled = true;
                 }
                 else
                 {
-                    context.GroupFilters.Add(new Filter("AND", context.ColumnList));
-                    this.FindControl<Button>("GroupFilterOR").IsEnabled = false;
+                    context.GroupFilters.Add(new Filter("AND", context.SelectedColumns));
+                    GroupFilterOR.IsEnabled = false;
+                    GroupFilterPop.IsEnabled = true;
                 }
             }
         }
@@ -124,13 +171,15 @@ namespace BD_Reader.Views
 
                 if (context.Filters.Count == 1 && type == "Default")
                 {
-                    this.FindControl<Button>("FilterOR").IsEnabled = true;
-                    this.FindControl<Button>("FilterAND").IsEnabled = true;
+                    FilterOR.IsEnabled = true;
+                    FilterAND.IsEnabled = true;
+                    FilterPop.IsEnabled = false;
                 }  
                 else if (context.GroupFilters.Count == 1 && type == "Group")
                 {
-                    this.FindControl<Button>("GroupFilterOR").IsEnabled = true;
-                    this.FindControl<Button>("GroupFilterAND").IsEnabled = true;
+                    GroupFilterOR.IsEnabled = true;
+                    GroupFilterAND.IsEnabled = true;
+                    GroupFilterPop.IsEnabled = false;
                 }  
             }
         }

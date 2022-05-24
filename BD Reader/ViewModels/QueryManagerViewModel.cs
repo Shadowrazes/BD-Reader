@@ -32,16 +32,14 @@ namespace BD_Reader.ViewModels
         {
             DbViewer = _DBViewer;
             tables = DbViewer.Tables;
-            requests = DbViewer.Requests;
+            requests = new ObservableCollection<Table>();
             filters = new ObservableCollection<Filter>();
             groupFilters = new ObservableCollection<Filter>();
             columnList = new ObservableCollection<string>();
 
-            SelectedTables = new List<Table>();
+            SelectedTables = new ObservableCollection<Table>();
+            SelectedColumns = new ObservableCollection<string>();
             JoinedTable = new List<Dictionary<string, object?>>();
-
-            Filters.Add(new Filter("", ColumnList));
-            GroupFilters.Add(new Filter("", ColumnList));
         }
 
         public void UpdateColumnList()
@@ -55,29 +53,36 @@ namespace BD_Reader.ViewModels
                 }
             }
             Filters.Clear();
-            Filters.Add(new Filter("", ColumnList));
+            GroupFilters.Clear();
         }
 
         public void AddRequest(string tableName)
         {
             List<List<object>> list = new List<List<object>>();
-            for (int j = 0; j < 30; j++)
+            for (int j = 0; j < 15; j++)
             {
                 List<object> a = new List<object>();
-                for (int i = 0; i < 65; i++)
+                for (int i = 0; i < 15; i++)
                 {
                     a.Add("Ok" + i.ToString());
                 }
                 list.Add(a);
             }
-            tables.Add(new Table(tableName, true, new QueryTableViewModel(list), new ObservableCollection<string>()));
-            Requests.Add(tables.Last<Table>());
+            Requests.Add(new Table(tableName, true, new QueryTableViewModel(list), new ObservableCollection<string>()));
+            Tables.Add(Requests.Last());
+        }
+
+        public void DeleteRequests()
+        {
+            Requests = new ObservableCollection<Table>(Requests.Where(table => Tables.Any(tables => tables.Name == table.Name)));
+            GC.Collect();
         }
 
         public void ClearAll()
         {
             JoinedTable.Clear();
             SelectedTables.Clear();
+            SelectedColumns.Clear();
             Filters.Clear();
             GroupFilters.Clear();
             ColumnList.Clear();
@@ -113,6 +118,7 @@ namespace BD_Reader.ViewModels
             }
             return true;
         }
+
         public void Join()
         {
             if (SelectedTables.Count > 0)
@@ -162,7 +168,8 @@ namespace BD_Reader.ViewModels
         }
 
         public List<Dictionary<string, object?>> JoinedTable { get; set; }
-        public List<Table> SelectedTables { get; set; }
+        public ObservableCollection<Table> SelectedTables { get; set; }
+        public ObservableCollection<string> SelectedColumns { get; set; }
         public ObservableCollection<Filter> Filters
         {
             get => filters;

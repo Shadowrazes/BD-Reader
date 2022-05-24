@@ -21,7 +21,6 @@ namespace BD_Reader.ViewModels
         private ObservableCollection<Event> events;
         private ObservableCollection<Result> results;
         private ObservableCollection<Team> teams;
-        private ObservableCollection<Table> requests;
         private bool currentTableIsSubtable;
 
         private ObservableCollection<string> FindProperties(string entityName, List<string> properties)
@@ -71,7 +70,6 @@ namespace BD_Reader.ViewModels
             try
             {
                 tables = new ObservableCollection<Table>();
-                requests = new ObservableCollection<Table>();
                 DataBase = new WRCContext();
 
                 string tableInfo = DataBase.Model.ToDebugString();
@@ -158,14 +156,6 @@ namespace BD_Reader.ViewModels
             set
             {
                 this.RaiseAndSetIfChanged(ref teams, value);
-            }
-        }
-        public ObservableCollection<Table> Requests
-        {
-            get => requests;
-            set
-            {
-                this.RaiseAndSetIfChanged(ref requests, value);
             }
         }
 
