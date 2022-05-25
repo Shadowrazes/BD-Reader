@@ -18,6 +18,7 @@ namespace BD_Reader.ViewModels
         public DriversTableViewModel(ObservableCollection<Driver> _drivers)
         {
             Table = _drivers;
+            RemovableItems = new List<object>();
         }
 
         public ObservableCollection<Driver> Table

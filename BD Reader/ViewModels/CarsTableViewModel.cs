@@ -18,6 +18,7 @@ namespace BD_Reader.ViewModels
         public CarsTableViewModel(ObservableCollection<Car> _cars)
         {
             Table = _cars;
+            RemovableItems = new List<object>();
         }
 
         public ObservableCollection<Car> Table

@@ -18,6 +18,7 @@ namespace BD_Reader.ViewModels
         public TeamsTableViewModel(ObservableCollection<Team> _teams)
         {
             Table = _teams;
+            RemovableItems = new List<object>();
         }
 
         public ObservableCollection<Team> Table

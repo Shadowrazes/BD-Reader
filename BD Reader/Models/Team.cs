@@ -8,6 +8,11 @@ namespace BD_Reader.Models
         public Team()
         {
             Drivers = new HashSet<Driver>();
+            Name = "None";
+            Years = 0;
+            Championships = 0;
+            Points = 0;
+            Podiums = 0;
         }
 
         public string Name { get; set; } = null!;

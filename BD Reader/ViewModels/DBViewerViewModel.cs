@@ -10,6 +10,7 @@ using Microsoft.Data.Sqlite;
 using System.IO;
 using System;
 using Avalonia.Controls;
+using Microsoft.EntityFrameworkCore;
 
 namespace BD_Reader.ViewModels
 {
@@ -81,23 +82,29 @@ namespace BD_Reader.ViewModels
                                                             str.IndexOf("Navigation") == -1 && str.IndexOf("(Car)") == -1));
 
 
-                drivers = new ObservableCollection<Driver>(DataBase.Drivers);
-                tables.Add(new Table("Drivers", false, new DriversTableViewModel(drivers), FindProperties("Driver", properties)));
+                DataBase.Drivers.Load<Driver>();
+                Drivers = DataBase.Drivers.Local.ToObservableCollection();
+                tables.Add(new Table("Drivers", false, new DriversTableViewModel(Drivers), FindProperties("Driver", properties)));
 
-                cars = new ObservableCollection<Car>(DataBase.Cars);
-                tables.Add(new Table("Cars", false, new CarsTableViewModel(cars), FindProperties("Car", properties)));
+                DataBase.Cars.Load<Car>();
+                Cars = DataBase.Cars.Local.ToObservableCollection();
+                tables.Add(new Table("Cars", false, new CarsTableViewModel(Cars), FindProperties("Car", properties)));
 
-                events = new ObservableCollection<Event>(DataBase.Events);
-                tables.Add(new Table("Events", false, new EventsTableViewModel(events), FindProperties("Event", properties)));
+                DataBase.Events.Load<Event>();
+                Events = DataBase.Events.Local.ToObservableCollection();
+                tables.Add(new Table("Events", false, new EventsTableViewModel(Events), FindProperties("Event", properties)));
 
-                results = new ObservableCollection<Result>(DataBase.Results);
-                tables.Add(new Table("Results", false, new ResultsTableViewModel(results), FindProperties("Result", properties)));
+                DataBase.Results.Load<Result>();
+                Results = DataBase.Results.Local.ToObservableCollection();
+                tables.Add(new Table("Results", false, new ResultsTableViewModel(Results), FindProperties("Result", properties)));
 
-                teams = new ObservableCollection<Team>(DataBase.Teams);
-                tables.Add(new Table("Teams", false, new TeamsTableViewModel(teams), FindProperties("Team", properties)));
+                DataBase.Teams.Load<Team>();
+                Teams = DataBase.Teams.Local.ToObservableCollection();
+                tables.Add(new Table("Teams", false, new TeamsTableViewModel(Teams), FindProperties("Team", properties)));
 
                 AllTables = new ObservableCollection<Table>(Tables.ToList());
 
+                CurrentTableName = "Drivers";
                 CurrentTableIsSubtable = false;
             }
             catch
@@ -111,6 +118,7 @@ namespace BD_Reader.ViewModels
             get => !currentTableIsSubtable;
             set => this.RaiseAndSetIfChanged(ref currentTableIsSubtable, value);
         }
+        public string CurrentTableName { get; set; }
         public WRCContext DataBase { get; set; }
         public ObservableCollection<Table> Tables
         {
@@ -171,18 +179,91 @@ namespace BD_Reader.ViewModels
 
         public void AddItem()
         {
-            DataBase.Add(new Driver());
-            Drivers.Add(new Driver());
+            switch (CurrentTableName)
+            {
+                case "Drivers":
+                    {
+                        Drivers.Add(new Driver());
+                        break;
+                    }
+                case "Cars":
+                    {
+                        Cars.Add(new Car());
+                        break;
+                    }
+                case "Results":
+                    {
+                        Results.Add(new Result());
+                        break;
+                    }
+                case "Events":
+                    {
+                        Events.Add(new Event());
+                        break;
+                    }
+                case "Teams":
+                    {
+                        Teams.Add(new Team());
+                        break;
+                    }
+            }
         }
 
-        public void DeleteItem()
+        public void DeleteItems()
         {
-
+            Table currentTable = Tables.Where(table => table.Name == CurrentTableName).ToList()[0];
+            List<object>? RemovableItems = currentTable.GetRemovableItems();
+            currentTable.SetRemoveInProgress(true);
+            if (RemovableItems != null && RemovableItems.Count != 0) {
+                switch (CurrentTableName)
+                {
+                    case "Drivers":
+                        {
+                            for(int i = 0; i < RemovableItems.Count; i++)
+                            {
+                                Drivers.Remove(RemovableItems[i] as Driver);
+                            }
+                            break;
+                        }
+                    case "Cars":
+                        {
+                            for(int i = 0; i < RemovableItems.Count; i++)
+                            {
+                                Cars.Remove(RemovableItems[i] as Car);
+                            }
+                            break;
+                        }
+                    case "Results":
+                        {
+                            for(int i = 0; i < RemovableItems.Count; i++)
+                            {
+                                Results.Remove(RemovableItems[i] as Result);
+                            }
+                            break;
+                        }
+                    case "Events":
+                        {
+                            for(int i = 0; i < RemovableItems.Count; i++)
+                            {
+                                Events.Remove(RemovableItems[i] as Event);
+                            }
+                            break;
+                        }
+                    case "Teams":
+                        {
+                            for(int i = 0; i < RemovableItems.Count; i++)
+                            {
+                                Teams.Remove(RemovableItems[i] as Team);
+                            }
+                            break;
+                        }
+                }
+            }
+            currentTable.SetRemoveInProgress(false);
         }
 
         public void Save()
         {
-            var a = Drivers;
             DataBase.SaveChanges();
         }
     }

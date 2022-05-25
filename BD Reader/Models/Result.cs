@@ -5,6 +5,14 @@ namespace BD_Reader.Models
 {
     public partial class Result
     {
+        public Result()
+        {
+            DriverFullName = "None";
+            StageName = "None";
+            EventName = "None";
+            Position = 0;
+            Time = "00:00";
+        }
         public string DriverFullName { get; set; } = null!;
         public string StageName { get; set; } = null!;
         public string? EventName { get; set; }

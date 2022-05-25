@@ -18,6 +18,7 @@ namespace BD_Reader.ViewModels
         public EventsTableViewModel(ObservableCollection<Event> _events)
         {
             Table = _events;
+            RemovableItems = new List<object>();
         }
 
         public ObservableCollection<Event> Table

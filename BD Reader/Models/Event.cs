@@ -8,6 +8,9 @@ namespace BD_Reader.Models
         public Event()
         {
             Results = new HashSet<Result>();
+            Name = "None";
+            Date = "0000-00-00 00:00:00";
+            Track = "None";
         }
 
         public string Name { get; set; } = null!;

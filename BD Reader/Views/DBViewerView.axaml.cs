@@ -42,6 +42,7 @@ namespace BD_Reader.Views
                 Table? table = tabControl.SelectedItem as Table;
                 if (context != null && table != null)
                 {
+                    context.CurrentTableName = table.Name;
                     context.CurrentTableIsSubtable = table.IsSubTable;
                 }
             }

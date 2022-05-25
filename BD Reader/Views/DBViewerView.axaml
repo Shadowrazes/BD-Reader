@@ -26,7 +26,7 @@
 			</TabControl.ContentTemplate>
 		</TabControl>
 		<Button Classes="gridBtn" Content="Add Row" Command="{Binding AddItem}" IsVisible="{Binding CurrentTableIsSubtable}" Grid.Row="1" Grid.Column="0"/>
-		<Button Classes="gridBtn" Content="Delete Row" Command="{Binding DeleteItem}" IsVisible="{Binding CurrentTableIsSubtable}" Grid.Row="1" Grid.Column="1"/>
+		<Button Classes="gridBtn" Content="Delete Row" Command="{Binding DeleteItems}" IsVisible="{Binding CurrentTableIsSubtable}" Grid.Row="1" Grid.Column="1"/>
 		<Button Classes="gridBtn" Content="Save" Command="{Binding Save}" IsVisible="{Binding CurrentTableIsSubtable}" Grid.Row="1" Grid.Column="2"/>
 		<Button Classes="gridBtn" Grid.ColumnSpan="3" Grid.Row="2" Grid.Column="0" Content="Open Query Manager" Command="{Binding $parent[Window].DataContext.OpenQueryManager}"/>
 	</Grid>

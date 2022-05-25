@@ -18,6 +18,7 @@ namespace BD_Reader.ViewModels
         public ResultsTableViewModel(ObservableCollection<Result> _results)
         {
             Table = _results;
+            RemovableItems = new List<object>();
         }
 
         public ObservableCollection<Result> Table

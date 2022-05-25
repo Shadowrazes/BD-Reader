@@ -9,6 +9,11 @@ namespace BD_Reader.Models
         public Car()
         {
             Drivers = new HashSet<Driver>();
+            Id = 0;
+            Number = 0;
+            Engine = "None";
+            Chassis = "None";
+            Class = "None";
         }
 
         public long Id { get; set; }

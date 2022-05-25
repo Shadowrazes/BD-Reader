@@ -70,5 +70,15 @@ namespace BD_Reader.ViewModels
         public List<Dictionary<string, object?>> Rows { get; }
 
         public ObservableCollection<string> Properties { get; set; }
+
+        public List<object>? GetRemovableItems()
+        {
+            return TableView.RemovableItems;
+        }
+
+        public void SetRemoveInProgress(bool value)
+        {
+            TableView.RemoveInProgress = value;
+        }
     }
 }

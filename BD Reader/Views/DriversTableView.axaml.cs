@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using ReactiveUI;
 using System.Reactive;
 using BD_Reader.Models;
+using BD_Reader.ViewModels;
 using Microsoft.Data.Sqlite;
 using System.IO;
 using System;
@@ -31,6 +32,22 @@ namespace BD_Reader.Views
             if (args.PropertyName == "Car" || args.PropertyName == "Results" || args.PropertyName == "TeamNameNavigation" || args.PropertyName == "Item")
             {
                 args.Cancel = true;
+            }
+        }
+
+        private void RowSelected(object control, SelectionChangedEventArgs args)
+        {
+            DataGrid? grid = control as DataGrid;
+            ViewModelBase? context = this.DataContext as ViewModelBase;
+            if (grid != null && context != null)
+            {
+                if (context.RemoveInProgress)
+                    return;
+                context.RemovableItems.Clear();
+                foreach (object item in grid.SelectedItems)
+                {
+                    context.RemovableItems.Add(item);
+                }
             }
         }
     }
