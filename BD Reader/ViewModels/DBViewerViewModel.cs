@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// DBViewerViewModel
+// Реализация логики окна просмотра таблиц
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,15 +19,16 @@ namespace BD_Reader.ViewModels
 {
     public class DBViewerViewModel : ViewModelBase
     {
-        private ObservableCollection<Table> tables;
-        private ObservableCollection<Table> allTables;
-        private ObservableCollection<Driver> drivers;
-        private ObservableCollection<Car> cars;
-        private ObservableCollection<Event> events;
-        private ObservableCollection<Result> results;
-        private ObservableCollection<Team> teams;
-        private bool currentTableIsSubtable;
+        private ObservableCollection<Table> m_tables;       // Таблицы БД
+        private ObservableCollection<Table> m_allTables;    // Таблицы БД + таблицы запросов
+        private ObservableCollection<Driver> m_drivers;     // Таблица пилотов
+        private ObservableCollection<Car> m_cars;           // Таблица автомобилей
+        private ObservableCollection<Event> m_events;       // Таблица событий
+        private ObservableCollection<Result> m_results;     // Таблица результатов
+        private ObservableCollection<Team> m_teams;         // Таблица команд
+        private bool m_currentTableIsSubtable;              // Является ли отображаемая таблица таблицей запроса
 
+        // Находим названия колонок каждой таблицы БД
         private ObservableCollection<string> FindProperties(string entityName, List<string> properties)
         {
             ObservableCollection<string> result = new ObservableCollection<string>();
@@ -71,7 +75,7 @@ namespace BD_Reader.ViewModels
         {
             try
             {
-                tables = new ObservableCollection<Table>();
+                m_tables = new ObservableCollection<Table>();
                 DataBase = new WRCContext();
 
                 string tableInfo = DataBase.Model.ToDebugString();
@@ -82,29 +86,33 @@ namespace BD_Reader.ViewModels
                                                             str.IndexOf("Navigation") == -1 && str.IndexOf("(Car)") == -1));
 
 
+                // Загружаем таблицы БД и создаем объекты Table
                 DataBase.Drivers.Load<Driver>();
                 Drivers = DataBase.Drivers.Local.ToObservableCollection();
-                tables.Add(new Table("Drivers", false, new DriversTableViewModel(Drivers), FindProperties("Driver", properties)));
+                m_tables.Add(new Table("Drivers", false, new DriversTableViewModel(Drivers), FindProperties("Driver", properties)));
 
                 DataBase.Cars.Load<Car>();
                 Cars = DataBase.Cars.Local.ToObservableCollection();
-                tables.Add(new Table("Cars", false, new CarsTableViewModel(Cars), FindProperties("Car", properties)));
+                m_tables.Add(new Table("Cars", false, new CarsTableViewModel(Cars), FindProperties("Car", properties)));
 
                 DataBase.Events.Load<Event>();
                 Events = DataBase.Events.Local.ToObservableCollection();
-                tables.Add(new Table("Events", false, new EventsTableViewModel(Events), FindProperties("Event", properties)));
+                m_tables.Add(new Table("Events", false, new EventsTableViewModel(Events), FindProperties("Event", properties)));
 
                 DataBase.Results.Load<Result>();
                 Results = DataBase.Results.Local.ToObservableCollection();
-                tables.Add(new Table("Results", false, new ResultsTableViewModel(Results), FindProperties("Result", properties)));
+                m_tables.Add(new Table("Results", false, new ResultsTableViewModel(Results), FindProperties("Result", properties)));
 
                 DataBase.Teams.Load<Team>();
                 Teams = DataBase.Teams.Local.ToObservableCollection();
-                tables.Add(new Table("Teams", false, new TeamsTableViewModel(Teams), FindProperties("Team", properties)));
+                m_tables.Add(new Table("Teams", false, new TeamsTableViewModel(Teams), FindProperties("Team", properties)));
 
                 AllTables = new ObservableCollection<Table>(Tables.ToList());
 
+                // Имя начальной таблицы
                 CurrentTableName = "Drivers";
+
+                // Эта таблицы не запросная
                 CurrentTableIsSubtable = false;
             }
             catch
@@ -115,68 +123,69 @@ namespace BD_Reader.ViewModels
 
         public bool CurrentTableIsSubtable
         {
-            get => !currentTableIsSubtable;
-            set => this.RaiseAndSetIfChanged(ref currentTableIsSubtable, value);
+            get => !m_currentTableIsSubtable;
+            set => this.RaiseAndSetIfChanged(ref m_currentTableIsSubtable, value);
         }
         public string CurrentTableName { get; set; }
         public WRCContext DataBase { get; set; }
         public ObservableCollection<Table> Tables
         {
-            get => tables;
+            get => m_tables;
             set
             {
-                this.RaiseAndSetIfChanged(ref tables, value);
+                this.RaiseAndSetIfChanged(ref m_tables, value);
             }
         }
         public ObservableCollection<Table> AllTables
         {
-            get => allTables;
+            get => m_allTables;
             set
             {
-                this.RaiseAndSetIfChanged(ref allTables, value);
+                this.RaiseAndSetIfChanged(ref m_allTables, value);
             }
         }
         public ObservableCollection<Driver> Drivers
         {
-            get => drivers;
+            get => m_drivers;
             set
             {
-                this.RaiseAndSetIfChanged(ref drivers, value);
+                this.RaiseAndSetIfChanged(ref m_drivers, value);
             }
         }
         public ObservableCollection<Car> Cars
         {
-            get => cars;
+            get => m_cars;
             set
             {
-                this.RaiseAndSetIfChanged(ref cars, value);
+                this.RaiseAndSetIfChanged(ref m_cars, value);
             }
         }
         public ObservableCollection<Event> Events
         {
-            get => events;
+            get => m_events;
             set
             {
-                this.RaiseAndSetIfChanged(ref events, value);
+                this.RaiseAndSetIfChanged(ref m_events, value);
             }
         }
         public ObservableCollection<Result> Results
         {
-            get => results;
+            get => m_results;
             set
             {
-                this.RaiseAndSetIfChanged(ref results, value);
+                this.RaiseAndSetIfChanged(ref m_results, value);
             }
         }
         public ObservableCollection<Team> Teams
         {
-            get => teams;
+            get => m_teams;
             set
             {
-                this.RaiseAndSetIfChanged(ref teams, value);
+                this.RaiseAndSetIfChanged(ref m_teams, value);
             }
         }
 
+        // В зависимости от отображаемой таблицы выбираем массив, в который добавится новая запись
         public void AddItem()
         {
             switch (CurrentTableName)
@@ -209,12 +218,22 @@ namespace BD_Reader.ViewModels
             }
         }
 
+        // В зависимости от отображаемой таблицы выбираем массив, из которого удалятся выбранные записи
         public void DeleteItems()
         {
+            // Выбираем нужную таблицы
             Table currentTable = Tables.Where(table => table.Name == CurrentTableName).ToList()[0];
+
+            // Получаем удаляемые элементы
             List<object>? RemovableItems = currentTable.GetRemovableItems();
+
+            // Помечаем, что идет удаление, чтобы событие DataGrid'a на изменение выбранной строчки не срабатывало
             currentTable.SetRemoveInProgress(true);
+
+            // Если список удаляемых элементов не пуст
             if (RemovableItems != null && RemovableItems.Count != 0) {
+
+                // Выбираем таблицу по имени и удаляем элементы
                 switch (CurrentTableName)
                 {
                     case "Drivers":
@@ -262,6 +281,7 @@ namespace BD_Reader.ViewModels
             currentTable.SetRemoveInProgress(false);
         }
 
+        // Сохраняем изменения в БД
         public void Save()
         {
             DataBase.SaveChanges();

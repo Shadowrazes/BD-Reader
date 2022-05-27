@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// QueryTableViewModel
+// Логика таблицы запроса
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,17 +17,20 @@ namespace BD_Reader.ViewModels
 {
     public class QueryTableViewModel : MainWindowViewModel
     {
-        private List<List<object>> queryList;
+        private List<List<object>> queryList;   // Список значений каждой колонки
         public QueryTableViewModel(List<Dictionary<string, object?>> _queryDict)
         {
             queryList = new List<List<object>>();
 
             List<string> properties = new List<string>();
+
+            // Первый элемент в списке значений - название колонки
             foreach (var property in _queryDict[0])
             {
                 properties.Add(property.Key);
             }
 
+            // Преобразуем словарь в список значений каждой колонки
             foreach (string property in properties)
             {
                 List<object> values = new List<object>();
@@ -36,16 +42,6 @@ namespace BD_Reader.ViewModels
                 }
                 queryList.Add(values);
             }
-
-            //foreach (Dictionary<string, object?> items in _queryDict)
-            //{
-            //    List<object> values = new List<object>();
-            //    foreach(var item in items)
-            //    {
-            //        values.Add(item.Value);
-            //    }
-            //    queryList.Add(values);
-            //}
         }
 
         public List<List<object>> QueryList

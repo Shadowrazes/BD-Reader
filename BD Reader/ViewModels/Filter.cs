@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// Filter
+// Одно из условия фильтрации
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,13 +21,20 @@ namespace BD_Reader.ViewModels
         {
             BoolOper = _BoolOper;
             Columns = _Columns;
+            Operator = "";
+            Column = "";
+            FilterVal = "";
             Operators = new ObservableCollection<string> {
-                    ">", ">=", "=", "<>", "<", "<="
+                    ">", ">=", "=", "<>", "<", "<=",
+                    "In Range", "Not In Range", "Contains", "Not Contains",
+                    "Is Null", "Not Null", "Belong", "Not Belong"
                 };
         }
-        public string BoolOper { get; set; }
-        public ObservableCollection<string> Columns { get; set; }
-        public ObservableCollection<string> Operators { get; set; }
-        public string FilterVal { get; set; }
+        public string? BoolOper { get; set; }                       // Указывает в какой цепочке операторов находится - AND или OR
+        public string FilterVal { get; set; }                       // Значение, которое участвует в обработке условия
+        public string? Operator { get; set; }                       // Оператор условия
+        public string? Column { get; set; }                         // Имя поля, из которого берется значение
+        public ObservableCollection<string> Columns { get; set; }   // Список доступных полей
+        public ObservableCollection<string> Operators { get; set; } // Список доступных операторов
     }
 }

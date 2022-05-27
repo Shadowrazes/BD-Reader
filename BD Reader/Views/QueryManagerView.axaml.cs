@@ -1,3 +1,6 @@
+// QueryManagerView
+// Реализации логики окна менеджера запросов
+
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -24,6 +27,12 @@ namespace BD_Reader.Views
             RequestName = this.FindControl<TextBox>("RequestName");
         }
 
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+
+        // Проверяем, есть ли уже таблица с таким именем и блокируем кнопку отправки запроса, если такая существует
         private void IsTableExist(QueryManagerViewModel context)
         {
             bool tableExist = false;
@@ -40,10 +49,8 @@ namespace BD_Reader.Views
             else
                 this.FindControl<Button>("Accept").IsEnabled = false;
         }
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+
+        // Попытка выполнить запрос
         private void AddRequest(object control, RoutedEventArgs args)
         {
             QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
@@ -53,6 +60,9 @@ namespace BD_Reader.Views
                 this.FindControl<Button>("Accept").IsEnabled = false;
             }
         }
+
+        // При вводе имени запроса включаем или отключаем кнопку отправки запроса
+        // в зависимости от того, есть ли уже запрос с таким именем
         private void RequestNameChanged(object control, KeyEventArgs args)
         {
             TextBox? requestName = control as TextBox;
@@ -72,6 +82,9 @@ namespace BD_Reader.Views
                 }
             }
         }
+
+        // При выборе таблиц вызываем их соединение,
+        // если соединение неуспешно - отключаем кнопку отправки запроса
         private void TableSelected(object control, SelectionChangedEventArgs args)
         {
             ListBox? tablesList = control as ListBox;
@@ -98,6 +111,10 @@ namespace BD_Reader.Views
                 }
             }
         }
+
+        // При выборе колонок из списка вызываем выборку и очищаем фильтры,
+        // если список выбранных колонок пуст то еще и отключаем их,
+        // также, если результат выборки пуст - блокируем кнопку отправки запроса
         private void ColumnSelected(object control, SelectionChangedEventArgs args)
         {
             ListBox? tablesList = control as ListBox;
@@ -147,6 +164,10 @@ namespace BD_Reader.Views
                 }
             }
         }
+
+        // Добавляем строку фильтрации с булевым оператором OR или AND в нужную таблицу фильтров
+        // - фильтры или фильтры группировки, в зависимости от того, в каком Expander'е нажимаются кнопки
+        // Если выбрана цепочка OR, то кнопка с добавлением AND блокируется и наоборот
         public void AddFilterOR(object control, RoutedEventArgs args)
         {
             QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
@@ -189,6 +210,10 @@ namespace BD_Reader.Views
                 }
             }
         }
+        //  //
+
+        // Удаляем последнюю строчку в нужной таблице фильтров, а также
+        // Блокируем кнопку удаления и активируем кнопки AND и OR, если в таблице осталась одна строка фильтра
         public void PopBackFilter(object control, RoutedEventArgs args)
         {
             QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
@@ -215,6 +240,8 @@ namespace BD_Reader.Views
                 }  
             }
         }
+
+        // Очищаем все рабочие массивы и возвращаемся на окно просмотра таблиц
         private void BackToViewer(object control, RoutedEventArgs args)
         {
             QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
@@ -223,6 +250,49 @@ namespace BD_Reader.Views
             {
                 context.ClearAll();
                 parentContext.OpenDBViewer();
+            }
+        }
+
+        // Меняем оператор условия и название поля для фильтрации для конкретного объекта Filter
+        private void ComboBoxSelectChanged(object control, SelectionChangedEventArgs args)
+        {
+            ComboBox? comboBox = control as ComboBox;
+            if (comboBox != null)
+            {
+                Filter? filterContext = comboBox.DataContext as Filter;
+                if (filterContext != null && comboBox.Name != null)
+                {
+                    if (comboBox.Name.Contains("Columns"))
+                    {
+                        filterContext.Column = comboBox.SelectedItem as string;
+                    }
+                    else if (comboBox.Name.Contains("Operators"))
+                    {
+                        filterContext.Operator = comboBox.SelectedItem as string;
+                    }
+                }
+            }
+        }
+
+        // Так же проверяем возможность отправки запроса при редактировании значения фильтрации
+        // и блокируем кнопку отправки, если запрос некорректный
+        private void FilterValueChanged(object control, KeyEventArgs args)
+        {
+            TextBox? filterValue = control as TextBox;
+            if (filterValue != null)
+            {
+                QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+                if (context != null)
+                {
+                    if (context.ResultTable.Count == 0)
+                    {
+                        this.FindControl<Button>("Accept").IsEnabled = false;
+                    }
+                    else
+                    {
+                        IsTableExist(context);
+                    }
+                }
             }
         }
     }

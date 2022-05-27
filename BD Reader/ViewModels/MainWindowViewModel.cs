@@ -1,3 +1,6 @@
+// MainWindowViewModel
+// Главное окно приложения, которое сменяет окна просмотрщика таблиц и менеджера запросов
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,9 +18,9 @@ namespace BD_Reader.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
-        private ViewModelBase page;
-        private DBViewerViewModel dbViewer;
-        private QueryManagerViewModel queryManager;
+        private ViewModelBase page;                 // Текущая страница
+        private DBViewerViewModel dbViewer;         // Страница просмотра таблиц
+        private QueryManagerViewModel queryManager; // Страница менеджера запросов
 
         public ViewModelBase Page
         {
@@ -25,7 +28,6 @@ namespace BD_Reader.ViewModels
             get => page;
         }
 
-        //{Binding $parent[Window].DataContext.OpenQueryManager}
         public MainWindowViewModel()
         {
             dbViewer = new DBViewerViewModel();
@@ -33,27 +35,19 @@ namespace BD_Reader.ViewModels
             Page = dbViewer;
         }
 
+        // Открываем менеджер запросов
         public void OpenQueryManager()
         {
             Page = queryManager;
-            queryManager.DeleteRequests();
-            //Observable.Merge().Take(1)
-            //    .Subscribe((note) =>
-            //    {
 
-            //        Page = dbViewer;
-            //    });
+            // И удаляем из списка запросов нужные таблицы, если такие есть
+            queryManager.DeleteRequests();
         }
 
+        // Открываем окно просмотра таблиц
         public void OpenDBViewer()
         {
             Page = dbViewer;
-            //Observable.Merge().Take(1)
-            //    .Subscribe((note) =>
-            //    {
-
-            //        Page = dbViewer;
-            //    });
         }
     }
 }
