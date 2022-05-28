@@ -52,12 +52,6 @@ namespace BD_Reader.ViewModels
                                 result.Add("CarId");
                             else
                                 result.Add(property);
-
-
-                            //if(!(entityName == "Team" && property == "Name"))
-                            //    result.Add(property);
-                            //else
-                            //    result.Add("TeamName");
                             i++;
                         }
                         return result;

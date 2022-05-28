@@ -123,7 +123,7 @@ namespace BD_Reader.ViewModels
                                 {
                                     string value = item[filter.Column].ToString().ToUpper().Replace(" ", ""); ;
                                     string filterVal = filter.FilterVal.ToUpper().Replace(" ", "");
-                                    if (value.IndexOf(filterVal) != -1 && value.IndexOf(filterVal) != 0)
+                                    if (value.IndexOf(filterVal) != -1)
                                         return true;
                                     else
                                         return false;
@@ -137,7 +137,7 @@ namespace BD_Reader.ViewModels
                             {
                                 string value = item[filter.Column].ToString().ToUpper().Replace(" ", ""); ;
                                 string filterVal = filter.FilterVal.ToUpper().Replace(" ", "");
-                                if (value.IndexOf(filterVal) == -1 || value.IndexOf(filterVal) == 0)
+                                if (value.IndexOf(filterVal) == -1)
                                     return true;
                                 else
                                     return false;
@@ -321,7 +321,7 @@ namespace BD_Reader.ViewModels
                             {
                                 string value = item[filter.Column].ToString().ToUpper().Replace(" ", ""); ;
                                 string filterVal = filter.FilterVal.ToUpper().Replace(" ", "");
-                                if (value.IndexOf(filterVal) != -1 && value.IndexOf(filterVal) != 0)
+                                if (value.IndexOf(filterVal) != -1)
                                     return true;
                                 else
                                     return false;
@@ -335,7 +335,7 @@ namespace BD_Reader.ViewModels
                             {
                                 string value = item[filter.Column].ToString().ToUpper().Replace(" ", ""); ;
                                 string filterVal = filter.FilterVal.ToUpper().Replace(" ", "");
-                                if (value.IndexOf(filterVal) == -1 || value.IndexOf(filterVal) == 0)
+                                if (value.IndexOf(filterVal) == -1)
                                     return true;
                                 else
                                     return false;

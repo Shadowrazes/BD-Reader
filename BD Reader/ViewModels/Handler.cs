@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿// Handler
+// Абстрактный класс для шаблона "Цепочка обязанностей"
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using ReactiveUI;
-// Handler
-// Абстрактный класс для шаблона "Цепочка обязанностей"
-
 using System.Reactive;
 using BD_Reader.Models;
 using Microsoft.Data.Sqlite;
