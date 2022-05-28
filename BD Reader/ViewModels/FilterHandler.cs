@@ -31,7 +31,7 @@ namespace BD_Reader.ViewModels
                 Filters = QM.GroupFilters;
         }
 
-        // Обработка услови для AND
+        // Обработка условия для AND
         private bool SwitchForChain(Filter filter)
         {
             // Исключение = неуспешный запрос
@@ -229,7 +229,7 @@ namespace BD_Reader.ViewModels
             }
         }
 
-        // Обработка услови для OR
+        // Обработка условия для OR
         private bool SwitchForUnion(Filter filter)
         {
             // Исключение = неуспешный запрос
@@ -427,7 +427,8 @@ namespace BD_Reader.ViewModels
             }
         }
 
-        // Получаем результат для цепочки с оператором OR, перебирая каждый фильтр
+        // Получаем результат для цепочки с оператором OR, перебирая каждый фильтр и
+        // соединяя результаты выборки с результирующим массивом на каждой итерации, который изначально пуст
         private void ResultByUnion()
         {
             foreach (Filter filter in Filters)
@@ -456,9 +457,18 @@ namespace BD_Reader.ViewModels
             QM.ResultTable = ResultTable;
         }
 
-        // Получаем результат для цепочки с оператором AND, перебирая каждый фильтр
+        // Получаем результат для цепочки с оператором AND, перебирая каждый фильтр и
+        // делая выборку из результирующего массива, занося её результат в него же на каждой итерации
+        // Вызывается также если фильтр в списке один
         private void ResultByChain()
         {
+            // Если фильтр один и он пустой, то выходим и переходим на следующий обработчик
+            if(Filters.Count == 1 && Filters[0].FilterVal == "" && Filters[0].Operator == "" && Filters[0].Column == "")
+            {
+                QM.IsRequestSuccess = true;
+                return;
+            }
+
             foreach(Filter filter in Filters)
             {
                 // Для проверки на "пустоту" или "НЕ пустоту" не нужно значение условия
@@ -511,8 +521,8 @@ namespace BD_Reader.ViewModels
                         NextHope.Try();
                     }
                 }
-                // Иначе переходим на следующий обработчик, если он есть
-                else if(NextHope != null)
+                // Иначе переходим на следующий обработчик, если он есть и выбраны колонки
+                else if(NextHope != null && QM.SelectedColumns.Count != 0)
                 {
                     NextHope.Try();
                 }

@@ -44,6 +44,12 @@ namespace BD_Reader.ViewModels
                     Rows.Add(tmp);
                 }
             }
+
+            // Иначе, если таблицы запросная, получаем список словарей из ее окна
+            else if (IsSubTable)
+            {
+                Rows = TableView.GetRows();
+            }
         }
 
         public string Name

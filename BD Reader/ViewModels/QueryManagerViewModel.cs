@@ -24,6 +24,7 @@ namespace BD_Reader.ViewModels
         private ObservableCollection<Filter> m_filters;         // Список фильтров
         private ObservableCollection<Filter> m_groupFilters;    // Список фильтров для группировки
         private MainWindowViewModel m_mainWindow;               // Ссылка на главное окно приложения
+        private bool isBDTableSelected;                         // Выбрана ли таблица из БД или из списка запросов
         internal Dictionary<string, string> Keys = new Dictionary<string, string>()
         {
             { "CarId", "CarId"},
@@ -55,9 +56,10 @@ namespace BD_Reader.ViewModels
             GroupFilterChain = new FilterHandler(this, "GroupFilters");
 
             FilterChain.NextHope = GroupChain;
-            //GroupChain.NextHope = GroupFilterChain;
+            GroupChain.NextHope = GroupFilterChain;
 
             IsRequestSuccess = false;
+            isBDTableSelected = true;
         }
 
         // Обновляем список доступных колонок для запроса и очищаем фильтры
@@ -83,9 +85,18 @@ namespace BD_Reader.ViewModels
             // Если запрос успешный добавляем результирующую таблицу в общий список и список запросов
             if (IsRequestSuccess)
             {
-                Requests.Add(new Table(tableName, true, new QueryTableViewModel(ResultTable.ToList()), new ObservableCollection<string>()));
+                ObservableCollection<string> properties = new ObservableCollection<string>();
+
+                foreach(var item in ResultTable[0]) 
+                {
+                    properties.Add(item.Key);
+                }
+
+                Requests.Add(new Table(tableName, true, new QueryTableViewModel(ResultTable.ToList()), properties));
                 AllTables.Add(Requests.Last());
             }
+
+            IsBDTableSelected = true;
 
             // Очищаем всё
             ClearAll();
@@ -212,6 +223,7 @@ namespace BD_Reader.ViewModels
                 JoinedTable.Clear();
                 ResultTable = JoinedTable;
                 ColumnList.Clear();
+                IsBDTableSelected = true;
             }
         }
 
@@ -226,6 +238,15 @@ namespace BD_Reader.ViewModels
         }
 
         public bool IsRequestSuccess { get; set; }                                  // Успешен ли запрос
+        public bool IsBDTableSelected 
+        {
+            get => isBDTableSelected;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref isBDTableSelected, value);
+            } 
+        }
+        public string? GroupingColumn { get; set; } = null;                         // Колонка, по кторой будет группировка
         public List<Dictionary<string, object?>> ResultTable { get; set; }          // Результирующий массив
         public List<Dictionary<string, object?>> JoinedTable { get; set; }          // Массив для соединения таблиц
         public List<Dictionary<string, object?>> SelectedColumnsTable { get; set; } // Массив элементов с выбранными колонками

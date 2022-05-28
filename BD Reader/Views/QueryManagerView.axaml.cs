@@ -85,6 +85,7 @@ namespace BD_Reader.Views
 
         // При выборе таблиц вызываем их соединение,
         // если соединение неуспешно - отключаем кнопку отправки запроса
+        // Если выбирана запросная таблица, блокируем выбор таблиц БД
         private void TableSelected(object control, SelectionChangedEventArgs args)
         {
             ListBox? tablesList = control as ListBox;
@@ -96,7 +97,24 @@ namespace BD_Reader.Views
                     context.SelectedTables = new ObservableCollection<Table>();
                     foreach (Table table in tablesList.SelectedItems)
                     {
-                        context.SelectedTables.Add(table);
+                        if (!table.IsSubTable)
+                        {
+                            context.SelectedTables.Add(table);
+                            context.IsBDTableSelected = true;
+                        }
+                        else
+                        {
+                            context.ClearAll();
+                            foreach (Table subTable in tablesList.SelectedItems)
+                            {
+                                if (subTable.IsSubTable)
+                                {
+                                    context.SelectedTables.Add(subTable);
+                                }
+                            }
+                            context.IsBDTableSelected = false;
+                            break;
+                        }
                     }
                     context.Join();
 
@@ -123,7 +141,7 @@ namespace BD_Reader.Views
                 QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
                 if (context != null)
                 {
-                    context.SelectedColumns = new ObservableCollection<string>();
+                    context.SelectedColumns.Clear();
                     context.Filters.Clear();
                     context.GroupFilters.Clear();
                     context.Filters.Add(new Filter("", context.SelectedColumns));
@@ -161,6 +179,20 @@ namespace BD_Reader.Views
                         GroupFilterOR.IsEnabled = false;
                         GroupFilterPop.IsEnabled = false;
                     }
+                }
+            }
+        }
+
+        // Меняем колонку по которой будет группировка при выборе из списка
+        private void GroupingColumnSelected(object control, SelectionChangedEventArgs args)
+        {
+            ListBox? columnList = control as ListBox;
+            if (columnList != null)
+            {
+                QueryManagerViewModel? context = this.DataContext as QueryManagerViewModel;
+                if (context != null)
+                {
+                    context.GroupingColumn = columnList.SelectedItem as string;
                 }
             }
         }

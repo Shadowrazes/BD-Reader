@@ -15,11 +15,13 @@ using System;
 
 namespace BD_Reader.ViewModels
 {
-    public class QueryTableViewModel : MainWindowViewModel
+    public class QueryTableViewModel : ViewModelBase
     {
         private List<List<object>> queryList;   // Список значений каждой колонки
+        private List<Dictionary<string, object?>> queryDictionaries;
         public QueryTableViewModel(List<Dictionary<string, object?>> _queryDict)
         {
+            queryDictionaries = _queryDict;
             queryList = new List<List<object>>();
 
             List<string> properties = new List<string>();
@@ -50,6 +52,11 @@ namespace BD_Reader.ViewModels
             {
                 return queryList;
             }
+        }
+
+        public override List<Dictionary<string, object?>> GetRows()
+        {
+            return queryDictionaries;
         }
     }
 }
