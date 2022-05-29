@@ -1,5 +1,5 @@
-// DBViewerView
-// Реализация логики окна просмотра таблиц
+п»ї// DBViewerView
+// Р РµР°Р»РёР·Р°С†РёСЏ Р»РѕРіРёРєРё РѕРєРЅР° РїСЂРѕСЃРјРѕС‚СЂР° С‚Р°Р±Р»РёС†
 
 using Avalonia;
 using Avalonia.Controls;
@@ -22,7 +22,7 @@ namespace BD_Reader.Views
             AvaloniaXamlLoader.Load(this);
         }
 
-        // При нажатии на кнопку удаления удаляем нужный таб
+        // РџСЂРё РЅР°Р¶Р°С‚РёРё РЅР° РєРЅРѕРїРєСѓ СѓРґР°Р»РµРЅРёСЏ СѓРґР°Р»СЏРµРј РЅСѓР¶РЅС‹Р№ С‚Р°Р±
         private void DeleteTab(object control, RoutedEventArgs args)
         {
             Button? btn = control as Button;
@@ -37,7 +37,7 @@ namespace BD_Reader.Views
             }
         }
 
-        // Если выбран другой таб, меняем имя текущего таба и помечаем, таблица запроса или таблица БД в нем
+        // Р•СЃР»Рё РІС‹Р±СЂР°РЅ РґСЂСѓРіРѕР№ С‚Р°Р±, РјРµРЅСЏРµРј РёРјСЏ С‚РµРєСѓС‰РµРіРѕ С‚Р°Р±Р° Рё РїРѕРјРµС‡Р°РµРј, С‚Р°Р±Р»РёС†Р° Р·Р°РїСЂРѕСЃР° РёР»Рё С‚Р°Р±Р»РёС†Р° Р‘Р” РІ РЅРµРј
         private void SelectedTabChanged(object control, SelectionChangedEventArgs args)
         {
             TabControl? tabControl = control as TabControl;
